@@ -1,0 +1,58 @@
+<template>
+  <div class="user">
+    <a-menu class="menu" :selected-keys="selectedKeys">
+      <a-menu-item v-for="(item, index) in list" :key="item.path" @click="toPage(item.path)">
+        <template #icon>
+          <icon-menu></icon-menu>
+        </template>
+        <span>{{ item.name }}</span>
+      </a-menu-item>
+    </a-menu>
+    <div class="content">
+      <ParentView></ParentView>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+defineOptions({ name: 'User' })
+
+const route = useRoute()
+const router = useRouter()
+
+const selectedKeys = ref('')
+selectedKeys.value = route.path
+
+const list = [
+  { name: '个人中心', value: 1, path: '/user/index' },
+  { name: '消息通知', value: 2, path: '/user/notice' }
+]
+
+const toPage = (path: string) => {
+  router.push({ path: path })
+  selectedKeys.value = path
+}
+</script>
+
+<style lang="scss" scoped>
+.user {
+  flex: 1;
+  display: flex;
+  padding: $margin;
+  box-sizing: border-box;
+  overflow: hidden;
+  .menu {
+    width: 220px;
+    height: fit-content;
+  }
+  .content {
+    flex: 1;
+    margin-left: $margin;
+    padding: $padding;
+    overflow: hidden;
+    background-color: var(--color-bg-1);
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+}
+</style>
