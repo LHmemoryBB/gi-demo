@@ -25,5 +25,8 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TreeSwitcherIcon: typeof import('./components/CateTree/TreeSwitcherIcon.vue')['default']
+    Verify: typeof import('./components/verifition/Verify.vue')['default']
+    VerifyPoints: typeof import('./components/verifition/Verify/VerifyPoints.vue')['default']
+    VerifySlide: typeof import('./components/verifition/Verify/VerifySlide.vue')['default']
   }
 }

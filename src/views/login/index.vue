@@ -23,9 +23,7 @@
           <a-form-item
             field="password"
             :rules="[
-              { required: true, message: '请输入密码' },
-              { match: Regexp.Password, message: '输入密码格式不正确' }
-            ]"
+              { required: true, message: '请输入密码' }            ]"
           >
             <a-input-password v-model="form.password" placeholder="密码" size="medium" allow-clear>
               <template #prefix><icon-lock :stroke-width="1" :style="{ fontSize: '20px' }" /></template>
@@ -45,6 +43,14 @@
           </a-form-item>
         </a-form>
       </div>
+      <Verify
+        @success="success"
+        mode="pop"
+        captchaType="blockPuzzle"
+        :imgSize="{ width: '330px', height: '155px' }"
+        ref="verify"
+      >
+      </Verify>
     </section>
 
     <GiThemeBtn class="theme-btn"></GiThemeBtn>
@@ -59,14 +65,17 @@ import { useLoading } from '@/hooks'
 import { Message, type FormInstance } from '@arco-design/web-vue'
 import LoginBg from './components/LoginBg/index.vue'
 import * as Regexp from '@/utils/regexp'
-
+import Verify from '@/components/verifition/Verify.vue'
+import md5 from 'js-md5'
 defineOptions({ name: 'Login' })
+
 const router = useRouter()
 const userStore = useUserStore()
-
+const verify = ref()
 const form = reactive({
   username: 'admin',
-  password: '123456'
+  password: 'Aa123123@',
+  captchaVerification: ''
 })
 
 // 记住密码
@@ -78,9 +87,15 @@ const errorMessage = ref('')
 const FormRef = ref<FormInstance>()
 // 点击登录
 const login = async () => {
+  const flag = await FormRef.value?.validate()
+  if (flag) return
+  verify.value.show()
+}
+// 验证码验证成功调用登录接口
+async function success(msg) {
   try {
-    const flag = await FormRef.value?.validate()
-    if (flag) return
+    form.captchaVerification = msg.captchaVerification
+    form.password = md5(form.password)
     setLoading(true)
     await userStore.login(form)
     router.push('/')

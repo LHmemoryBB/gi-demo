@@ -27,7 +27,6 @@ import Editor from './demo/editor/index.vue'
 import RowTreeTable from './demo/row-tree-table/index.vue'
 import Map from './demo/map/index.vue'
 import JSDialog from './demo/js-dialog/index.vue'
-import ImageZoom from './demo/image-zoom/index.vue'
 import FnComponent from './demo/fn-component/index.vue'
 import Mitt from './demo/mitt/index.vue'
 import ApiTest from './demo/api-test/index.vue'
@@ -49,7 +48,6 @@ const menuList = [
   { name: '地图', value: Map },
   { name: 'Mitt中央通信', value: Mitt },
   { name: '原生模态框', value: JSDialog },
-  { name: '图片放大镜', value: ImageZoom },
   { name: '函数式组件', value: FnComponent }
 ]
 </script>

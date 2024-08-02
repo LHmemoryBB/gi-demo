@@ -31,7 +31,12 @@ const StatusCodeMessage: ICodeMessage = {
 
 const http: AxiosInstance = axios.create({
   // baseURL: process.env.VUE_APP_API_PREFIX,
-  timeout: 30 * 1000
+  timeout: 60 * 1000,
+  headers: {
+    // 设置后端需要的传参类型
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+},
 })
 
 // 请求拦截器
@@ -39,14 +44,9 @@ http.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     NProgress.start() // 进度条
     config.headers = {
-      'Content-Type': 'application/json' // 配置请求头
-    }
-    const token = getToken()
-    if (token) {
-      if (!config.headers) {
-        config.headers = {}
-      }
-      config.headers['token'] = token
+      'Authorization': getToken('_token'), // 配置请求头
+      'X-CSRF-TOKEN': getToken('XSRF-TOKEN'), // 配置请求头
+      'X-XSRF-TOKEN': getToken('XSRF-TOKEN'), // 配置请求头
     }
     return config
   },
