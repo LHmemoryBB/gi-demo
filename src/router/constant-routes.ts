@@ -5,44 +5,50 @@ const Layout = () => import('@/layout/index.vue')
 /** 常驻路由 */
 export const constantRoutes: RouteRecordRaw[] = [
   {
-    path: '/redirect',
+    path: '/',
+    name: 'home',
+    meta: { title: '首页',icon: 'HomeFilled' },
     component: Layout,
-    meta: { hidden: true },
-    children: [
-      {
-        path: '/redirect/:path(.*)',
-        component: () => import('@/views/redirect/index.vue')
-      }
-    ]
+    children: [{ path: '/', name: 'case', component: () => import('@/views/config/index.vue') }]
   },
   {
     path: '/login',
     component: () => import('@/views/login/index.vue'),
     meta: { hidden: true }
   },
-  {
-    path: '/:pathMatch(.*)*',
-    component: () => import('@/views/error/404.vue'),
-    meta: { hidden: true }
-  },
-  {
-    path: '/403',
-    component: () => import('@/views/error/403.vue'),
-    meta: { hidden: true }
-  },
-  {
-    path: '',
-    component: Layout,
-    redirect: '/home',
-    children: [
-      {
-        path: '/home',
-        component: () => import('@/views/home/index.vue'),
-        name: 'Index',
-        meta: { title: '首页', icon: 'icon-dashboard', affix: true, svgIcon: 'menu-home' }
-      }
-    ]
-  }
+  // {
+  //   path: '/:pathMatch(.*)*',
+  //   component: () => import('@/views/error/404.vue'),
+  //   meta: { hidden: true }
+  // },
+  // {"path": '/:catchAll(.*)',"meta":{"title":"404"}, component: () => import('@/views/error/404.vue')},
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/config',
+  //   children: [
+  //     {
+  //       path: '/home',
+  //       component: () => import('@/views/home/index.vue'),
+  //       name: 'Index',
+  //       meta: { title: '首页', icon: 'icon-dashboard', affix: true, svgIcon: 'menu-home' }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/home',
+  //   component: Layout,
+  //   redirect: '/home',
+  //   name: 'home',
+  //   children: [
+  //     {
+  //       path: '/home',
+  //       component: () => import('@/views/home/index.vue'),
+  //       name: 'Index',
+  //       meta: { title: '首页', icon: 'icon-dashboard', affix: true, svgIcon: 'menu-home' }
+  //     }
+  //   ]
+  // },
 ]
 
 export default constantRoutes

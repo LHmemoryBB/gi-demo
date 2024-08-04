@@ -1,17 +1,34 @@
-import { createRouter, createWebHashHistory, type RouteRecordNormalized, type RouteRecordRaw } from 'vue-router'
-import _XEUtils_ from 'xe-utils'
-import ConstantRoutes from './constant-routes'
-import AsyncRoutes from './async-routes'
+import { createRouter, createWebHashHistory } from 'vue-router'
+// import ConstantRoutes from './constant-routes'
+// import AsyncRoutes from './async-routes'
+
+import routers_beforeEach from '@/router/routers_beforeEach'
+const Layout = () => import('@/layout/index.vue')
 
 /** 常驻路由 */
-export const constantRoutes = ConstantRoutes
+// export const constantRoutes = ConstantRoutes
 
 /** 动态路由/异步路由 */
-export const asyncRoutes = AsyncRoutes
+// export const asyncRoutes = AsyncRoutes
 
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    meta: { title: '首页', icon: 'HomeFilled' },
+    component: Layout,
+    children: [{ path: '/', name: 'case', component: () => import('@/views/config/index.vue') }]
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/login/index.vue'),
+    meta: { hidden: true }
+  },
+  { path: '/:catchAll(.*)', meta: { title: '404' }, component: () => import('@/views/error/404.vue') }
+]
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
-  routes: constantRoutes
+  history: createWebHashHistory(),
+  routes
 })
 
 /** 重置路由 */
@@ -29,5 +46,5 @@ export function resetRouter() {
     window.location.reload()
   }
 }
-
+router.beforeEach(routers_beforeEach)
 export default router

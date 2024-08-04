@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { RouteRecordRaw } from 'vue-router'
-import router, { constantRoutes, asyncRoutes as dynamicRoutes } from '@/router'
+// import router, { constantRoutes, asyncRoutes as dynamicRoutes } from '@/router'
 import Layout from '@/layout/index.vue'
 import ParentView from '@/components/ParentView/index.vue'
 import { getUserRoutes } from '@/apis'
@@ -94,9 +94,9 @@ const storeSetup = () => {
   const topbarRoutes = ref<RouteRecordRaw[]>([]) // 页签路由
   const sidebarRoutes = ref<RouteRecordRaw[]>([]) // 侧边栏路由
 
-  const setRoutes = (routesArray: RouteRecordRaw[]) => {
-    routes.value = constantRoutes.concat(routesArray)
-  }
+  // const setRoutes = (routesArray: RouteRecordRaw[]) => {
+  //   routes.value = constantRoutes.concat(routesArray)
+  // }
 
   const setTopbarRoutes = (routes: RouteRecordRaw[]) => {
     topbarRoutes.value = routes
@@ -107,37 +107,41 @@ const storeSetup = () => {
   }
 
   /** 生成路由 */
-  const generateRoutes = (): Promise<RouteRecordRaw[]> => {
-    return new Promise((resolve) => {
-      // 向后端请求路由数据
-      getUserRoutes().then((res) => {
-        const sdata = JSON.parse(JSON.stringify(res.data))
-        const rdata = JSON.parse(JSON.stringify(res.data))
-        const defaultData = JSON.parse(JSON.stringify(res.data))
+  // const generateRoutes = (): Promise<RouteRecordRaw[]> => {
+  //   console.log('没走这里吧');
 
-        const sidebarRoutes = filterAsyncRouter(sdata)
-        const rewriteRoutes = filterAsyncRouter(rdata, false, true)
-        const defaultRoutes = filterAsyncRouter(defaultData)
+  //   return new Promise((resolve) => {
+  //     // 向后端请求路由数据
+  //     getUserRoutes().then((res) => {
+  //       console.log('走这里了吗');
 
-        const asyncRoutes = filterDynamicRoutes(dynamicRoutes)
-        asyncRoutes.forEach((route) => {
-          router.addRoute(route)
-        })
+  //       const sdata = JSON.parse(JSON.stringify(res.data.routesMap))
+  //       const rdata = JSON.parse(JSON.stringify(res.data.routesMap))
+  //       const defaultData = JSON.parse(JSON.stringify(res.data.routesMap))
 
-        setRoutes(rewriteRoutes)
-        // console.log('常驻路由constantRoutes', constantRoutes)
-        setSidebarRoutes(constantRoutes.concat(sidebarRoutes))
-        setTopbarRoutes(defaultRoutes)
-        resolve(rewriteRoutes)
-      })
-    })
-  }
+  //       const sidebarRoutes = filterAsyncRouter(sdata)
+  //       const rewriteRoutes = filterAsyncRouter(rdata, false, true)
+  //       const defaultRoutes = filterAsyncRouter(defaultData)
+
+  //       const asyncRoutes = filterDynamicRoutes(dynamicRoutes)
+  //       asyncRoutes.forEach((route) => {
+  //         router.addRoute(route)
+  //       })
+
+  //       setRoutes(rewriteRoutes)
+  //       console.log('常驻路由constantRoutes', constantRoutes)
+  //       setSidebarRoutes(constantRoutes)
+  //       setTopbarRoutes(defaultRoutes)
+  //       resolve(rewriteRoutes)
+  //     })
+  //   })
+  // }
 
   return {
     routes,
     topbarRoutes,
-    sidebarRoutes,
-    generateRoutes
+    sidebarRoutes
+    // generateRoutes
   }
 }
 

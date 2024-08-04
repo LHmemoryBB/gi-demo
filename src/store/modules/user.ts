@@ -1,18 +1,18 @@
 import { defineStore } from 'pinia'
 import { ref, reactive, computed } from 'vue'
-import { resetRouter } from '@/router'
+// import { resetRouter } from '@/router'
 import { login as loginApi, logout as logoutApi, getUserInfo as getUserInfoApi } from '@/apis'
 import type { UserInfo } from '@/apis'
 import { setToken, removeToken, getToken } from '@/utils/auth'
 
 const storeSetup = () => {
-  const userInfo = reactive<Pick<UserInfo, 'name' | 'avatar'>>({
+  const userInfo = ref({
     name: '',
     avatar: ''
   })
-  const userName = computed(() => userInfo.name)
-  const avatar = computed(() => userInfo.avatar)
-
+  let NavList = ref([])
+  const userName = computed(() => userInfo.value.name)
+  const avatar = computed(() => userInfo.value.avatar)
   const token = ref<string>(getToken('_token') || '')
   const roles = ref<string[]>([]) // 当前用户角色
   const permissions = ref<string[]>([]) // 当前角色权限标识集合
@@ -26,7 +26,7 @@ const storeSetup = () => {
   // 登录
   const login = async (params: any) => {
     const res = await loginApi(params)
-    // setToken(res.data.token)
+    setToken("_token", res.data.token)
     token.value = res.data.token
   }
 
@@ -36,23 +36,28 @@ const storeSetup = () => {
     roles.value = []
     permissions.value = []
     removeToken()
-    resetRouter()
+    // resetRouter()
   }
 
-  // 获取用户信息
-  const getInfo = async () => {
-    const res = await getUserInfoApi()
-    userInfo.name = res.data.name
-    userInfo.avatar = res.data.avatar
-    if (res.data.roles && res.data.roles.length) {
-      roles.value = res.data.roles
-      permissions.value = res.data.permissions
-    } else {
-      roles.value = ['ROLE_DEFAULT']
-    }
+  // // 获取用户信息
+  // const getInfo = async () => {
+  //   const res = await getUserInfoApi()
+  //   userInfo.name = res.data.name
+  //   userInfo.avatar = res.data.avatar
+  //   if (res.data.roles && res.data.roles.length) {
+  //     roles.value = res.data.roles
+  //     permissions.value = res.data.permissions
+  //   } else {
+  //     roles.value = ['ROLE_DEFAULT']
+  //   }
+  // }
+  const SetUserInfo = (data: Object) =>{
+    userInfo.value = data
   }
-
-  return { userInfo, userName, avatar, token, roles, permissions, login, logout, getInfo, resetToken }
+  const SetNavList = (obj : any)=> {
+    NavList.value = obj
+  };
+  return {NavList, userInfo, userName, avatar, token, roles, permissions, login, logout, SetUserInfo, resetToken, SetNavList }
 }
 
 export const useUserStore = defineStore('user', storeSetup, { persist: { paths: ['token'], storage: localStorage } })

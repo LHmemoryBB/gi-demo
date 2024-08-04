@@ -47,7 +47,8 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       alias: {
         '~': fileURLToPath(new URL('./', import.meta.url)),
-        '@': fileURLToPath(new URL('./src', import.meta.url))
+        '@': path.resolve(__dirname, 'src')
+        
       }
     },
     base: env.VITE_PUBLIC_PATH,
@@ -61,12 +62,20 @@ export default defineConfig(({ command, mode }) => {
     },
     server: {
       proxy: {
-        '/api': {
-          target: env.VITE_APP_BASE_URL, // 后台服务器地址
-          changeOrigin: true, // 是否允许不同源
-          secure: false, // 支持https
-          rewrite: (path) => path.replace(/^\/api/, '/api')
-        }
+        "/api": {
+          target: env.VITE_API_BASE_URL, // 测试
+          changeOrigin: true,
+          secure: false, // 如果是https接口，需要配置这个参数
+          ws: true, //websocket支持
+          // rewrite: (path: any) => path.replace(/^\/api/, ""),
+        },
+        "/VerificationCode": {
+          target: env.VITE_API_VERIFICATION_CODE,
+          changeOrigin: true,
+          secure: false, // 如果是https接口，需要配置这个参数
+          ws: true, //websocket支持
+          rewrite: (path: any) => path.replace(/^\/VerificationCode/, ""),
+        },
       }
     },
     // 构建

@@ -2,7 +2,7 @@
   <div class="asider">
     <Logo :collapse="collapse"></Logo>
     <a-layout-sider collapsible breakpoint="xl" :width="232" class="menu" @collapse="handleCollapse">
-      <a-menu :selected-keys="[activeMenu]" :auto-open-selected="true" :style="{ width: '100%', height: '100%' }">
+      <a-menu :selected-keys="[`/${activeMenu}`]" :auto-open-selected="true" :style="{ width: '100%', height: '100%' }">
         <SidebarItem
           v-for="(route, index) in sidebarRoutes"
           :key="route.path + index"
@@ -17,26 +17,24 @@
 <script setup lang="ts" name="Asider">
 import { usePermissionStore } from '@/store'
 import SidebarItem from './SidebarItem.vue'
+import { useUserStore } from '@/store'
 import Logo from './Logo.vue'
-
+import { getUserRoutes } from '@/apis'
 const route = useRoute()
+const userStore = useUserStore()
 const router = useRouter()
-
 const permissionStore = usePermissionStore()
-const sidebarRoutes = computed(() => permissionStore.sidebarRoutes)
-
+const sidebarRoutes = computed(() => userStore.NavList)
 const collapse = ref(false)
 const handleCollapse = (isCollapse: boolean) => {
   collapse.value = isCollapse
 }
 
-console.log('sidebarRoutes', JSON.parse(JSON.stringify(sidebarRoutes.value)))
-
 // 当前页面激活菜单路径，先从路由里面找
 const activeMenu = computed(() => {
   const { meta, path } = route
-  if (meta?.activeMenu) {
-    return meta.activeMenu
+  if (meta) {
+    return meta.title
   }
   return path
 })

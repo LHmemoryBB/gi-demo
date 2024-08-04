@@ -59,17 +59,17 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   (response: AxiosResponse) => {
     const { data } = response
-    const { message, success, code } = data
+    const { message, code } = data
 
-    // token失效
-    if (code === 401) {
-      NProgress.done()
-      // Message.error('token失效')
-      router.replace('/login')
-      return Promise.reject(new Error('token失效'))
-    }
+    // // token失效
+    // if (code === 401) {
+    //   NProgress.done()
+    //   // Message.error('token失效')
+    //   router.replace('/login')
+    //   return Promise.reject(new Error('token失效'))
+    // }
 
-    if (!success) {
+    if (code !== 200) {
       NProgress.done()
       Notification.error(message || '服务器端错误')
       return Promise.reject(new Error('Error'))

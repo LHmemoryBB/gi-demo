@@ -43,7 +43,8 @@
           </a-form-item>
         </a-form>
       </div>
-      <Verify
+    </section>
+    <Verify
         @success="success"
         mode="pop"
         captchaType="blockPuzzle"
@@ -51,8 +52,6 @@
         ref="verify"
       >
       </Verify>
-    </section>
-
     <GiThemeBtn class="theme-btn"></GiThemeBtn>
 
     <LoginBg></LoginBg>
@@ -98,6 +97,8 @@ async function success(msg) {
     form.password = md5(form.password)
     setLoading(true)
     await userStore.login(form)
+    console.log('123123123, 登录成功回调');
+    
     router.push('/')
     setLoading(false)
     Message.success('登录成功')

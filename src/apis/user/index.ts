@@ -5,7 +5,7 @@ import type { RouteRecordRaw } from 'vue-router'
 
 /** @desc 登录 */
 export function login(data: { username: string; password: string }) {
-  return http.post<User.LoginRes>(`${prefix}/user/login`, data)
+  return http.post<User.LoginRes>(`${prefix}/login`, data)
 }
 
 /** @desc 退出登录 */
@@ -20,5 +20,5 @@ export const getUserInfo = () => {
 
 /** @desc 获取用户路由信息 */
 export const getUserRoutes = () => {
-  return http.get<RouteRecordRaw[]>(`${prefix}/user/getUserRoutes`)
+  return http.post<RouteRecordRaw[]>(`${prefix}/menus`)
 }
