@@ -1,0 +1,196 @@
+<script setup>
+import { ref, reactive } from "vue";
+import Tform from "@/components/GiForm/index.vue";
+import TuploadImg from "@/components/GiUpload/ImageUploader.vue";
+import { useAxios } from '@/hooks'
+import { up_image, getBannerDetail, setBannerUpdate } from "@/api/index";
+
+const _state = () => ({
+  id: "",
+  banner: [],
+  ydBanner: [],
+});
+const ruleForm = reactive(_state());
+const listInput = [
+  {
+    type: "custom",
+    prop: "all",
+  },
+];
+const {
+  loading: loadingDetail,
+  onSuccess: onSuccessDetail,
+  onError: onErrorDetail,
+  send: sendDetail,
+} = useAxios(getBannerDetail, {
+  immediate: false,
+});
+
+//初始
+const on_init = () => {
+  sendDetail();
+  onSuccessDetail((res) => {
+    for (let keys in ruleForm) {
+      ruleForm[keys] = res.data[keys] ?? "";
+    }
+    ruleForm.banner = ruleForm.banner.map((item) => {
+      return {
+        name: item,
+        uid: item,
+        url: item,
+        response: [item],
+      };
+    });
+    ruleForm.ydBanner = ruleForm.ydBanner.map((item) => {
+      return {
+        name: item,
+        uid: item,
+        url: item,
+        response: [item],
+      };
+    });
+  });
+  onErrorDetail((res) => {
+    ElNotification.error({
+      title: "提示",
+      message: res.message || "数据异常！",
+      duration: 3000,
+    });
+  });
+};
+on_init();
+
+//关闭
+const RefTform = ref(null);
+const close = () => {
+  RefTform.value?.resetForm();
+};
+
+const { loading, data, onSuccess, onError, send } = useAxios(setBannerUpdate, {
+  immediate: false,
+});
+onSuccess((res) => {
+  ElNotification.success({
+    title: "提示",
+    message: res.message || "配置成功!",
+    duration: 3000,
+  });
+});
+onError((res) => {
+  ElNotification.error({
+    title: "提示",
+    message: res.message || "配置失败！",
+    duration: 3000,
+  });
+});
+
+//提交
+const submit = (type) => {
+  let data = {
+    ...ruleForm,
+    banner: ruleForm.banner.map((item) => item.response[0]),
+    ydBanner: ruleForm.ydBanner.map((item) => item.response[0]),
+  };
+
+  send(data);
+};
+
+//确认
+const confirm = () => {
+  RefTform.value?.submitForm();
+};
+
+// //图片上传
+// const pathSuccess = (response, file, fileList)=>{
+// 	ruleForm.banner = fileList
+// }
+// //图片删除
+// const pathRemove = (file, fileList)=>{
+// 	ruleForm.banner = fileList
+// }
+
+//图片上传
+const pathSuccess = (response, file, fileList, keys) => {
+  ruleForm[keys] = fileList;
+};
+
+//图片删除
+const pathRemove = (file, fileList, keys) => {
+  ruleForm[keys] = fileList;
+};
+</script>
+
+<template>
+  <div>
+    <div class="content content_form">
+      <Tform
+        ref="RefTform"
+        :loading="loading"
+        :ruleForm="ruleForm"
+        :listInput="listInput"
+        @submit="submit"
+        label_width="120px"
+        querytext="修改"
+      >
+        <template #all="scope">
+          <el-form-item
+            label="PC轮播图"
+            :prop="'banner'"
+            :rules="{ required: true, message: '请添加图片' }"
+            label-width="120px"
+          >
+            <TuploadImg
+              :up_img_api="up_image"
+              :fileList="ruleForm.banner"
+              :size="1024 * 1024 * 10"
+              sizeName="10MB"
+              :limit="3"
+              multiple
+              @pathSuccess="
+                (response, file, fileList) =>
+                  pathSuccess(response, file, fileList, 'banner')
+              "
+              @pathRemove="
+                (file, fileList) => pathRemove(file, fileList, 'banner')
+              "
+            ></TuploadImg>
+          </el-form-item>
+          <el-form-item
+            label="移动轮播图"
+            :prop="'ydBanner'"
+            :rules="{ required: true, message: '请添加图片' }"
+            label-width="120px"
+          >
+            <TuploadImg
+              :up_img_api="up_image"
+              :fileList="ruleForm.ydBanner"
+              :size="1024 * 1024 * 10"
+              sizeName="10MB"
+              :limit="3"
+              multiple
+              @pathSuccess="
+                (response, file, fileList) =>
+                  pathSuccess(response, file, fileList, 'ydBanner')
+              "
+              @pathRemove="
+                (file, fileList) => pathRemove(file, fileList, 'ydBanner')
+              "
+            ></TuploadImg>
+          </el-form-item>
+        </template>
+      </Tform>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.fixed_width_box {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  padding-top: 10px;
+}
+.fixed_width {
+  display: flex;
+  flex-direction: column;
+}
+</style>

@@ -1,6 +1,6 @@
 <script setup>
 	import { reactive, ref, defineAsyncComponent } from 'vue';
-	import useAxios from '@/hooks/useAxios'
+	import { useAxios } from '@/hooks'
 	import { getUserList, setUserEnabled, getUserExport } from '@/api/index'
 	import Tform from '@/components/Templates/Tform.vue';
 	import Ttable from '@/components/Templates/Ttable.vue';

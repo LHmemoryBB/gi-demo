@@ -1,6 +1,6 @@
 <script setup>
 	import { defineEmits, defineExpose } from 'vue'
-	import useAxios from '@/hooks/useAxios'
+	import { useAxios } from '@/hooks'
 	import { setResetApiKey } from '@/api/index'
 	
 	const emit = defineEmits();

@@ -2,7 +2,7 @@
 	import { reactive, ref } from 'vue';
 	import Tform from '@/components/Templates/Tform.vue';
 	import Ttable from '@/components/Templates/Ttable.vue';
-	import useAxios from '@/hooks/useAxios'
+	import { useAxios } from '@/hooks'
 	import { openChangeStatus } from '@/hooks/_del'
 	import { getUserApplyList,setApplyApproved } from '@/api/index'
 	

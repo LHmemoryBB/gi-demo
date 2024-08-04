@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { FileItem } from '@/apis'
+import type { FileItem } from '@/api/index'
 
 type TViewMode = 'grid' | 'list'
 

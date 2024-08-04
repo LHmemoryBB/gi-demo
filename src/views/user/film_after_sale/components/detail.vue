@@ -1,8 +1,8 @@
 <script setup>
 import { ref, reactive, defineEmits, defineExpose } from "vue";
 import Tdialog from "@/components/Templates/Tdialog.vue";
-import Tform from "@/components/Templates/Tform.vue";
-import useAxios from "@/hooks/useAxios";
+import Tform from "@/components/GiForm/index.vue";
+import { useAxios } from '@/hooks'
 import { AfterSaleDetail, AfterSaleApproved } from "@/api/index";
 const emit = defineEmits(["onSuccess"]);
 

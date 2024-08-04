@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, reactive, computed } from 'vue'
 // import { resetRouter } from '@/router'
-import { login as loginApi, logout as logoutApi, getUserInfo as getUserInfoApi } from '@/apis'
-import type { UserInfo } from '@/apis'
+import { getUserInfo as loginApi, logout as logoutApi } from '@/api/index'
 import { setToken, removeToken, getToken } from '@/utils/auth'
 
 const storeSetup = () => {
@@ -36,7 +35,7 @@ const storeSetup = () => {
     roles.value = []
     permissions.value = []
     removeToken()
-    // resetRouter()
+    logoutApi()
   }
 
   // // 获取用户信息

@@ -1,84 +1,157 @@
-<template>
-  <div class="table-page">
-    warning
-  </div>
-</template>
-
-<script setup lang="ts">
-import { usePagination } from '@/hooks'
-import { getPersonList } from '@/apis'
-import type { PersonItem } from '@/apis'
-
-defineOptions({ name: 'TableMain' })
-
-const form = reactive({
-  value1: '',
-  value2: '',
-  value3: '',
-  value4: '',
-  value5: ''
-})
-
-const loading = ref(false)
-const tableData = ref<PersonItem[]>([])
-const collapsed = ref(false)
-
-const { current, pageSize, total, changeCurrent, changePageSize, setTotal } = usePagination(() => getTableData())
-
-const getTableData = async () => {
-  try {
-    loading.value = true
-    const res = await getPersonList({
-      current: current.value,
-      pageSize: pageSize.value
-    })
-    tableData.value = res.data.list
-    setTotal(res.data.total)
-  } catch (error) {
-  } finally {
-    loading.value = false
-  }
-}
-
-getTableData()
+<script setup>
+	import { ref, reactive, toRaw, defineAsyncComponent } from 'vue'
+	import Tform from '@/components/Templates/Tform.vue';
+	import { useAxios } from '@/hooks'
+	import { getMail,setMailUpdate } from '@/api/index'
+	
+	const _state = ()=>({
+		mailHost:'',
+		mailPort:'',
+		mailFrom:'',
+		id:1,
+		mailAuth:true,
+		mailUser:'',
+		mailPass:'',
+		mailTo:''
+	})
+	const ruleForm = reactive(_state());
+	const listInput = [
+		{
+			type:'input',
+			label: '发送域名',
+			prop: 'mailHost',
+			rules: { required: true, message: '请填写域名' }
+		},{
+			type:'input',
+			label: '发送端口',
+			prop: 'mailPort',
+			rules: { required: true, message: '请填写发送端口' }
+		},{
+			type:'input',
+			label: '发件人',
+			prop: 'mailFrom',
+			placeholder: '收件人，name <user@xxx.xx>',
+			rules: { required: true, message: '请填写发件人' }
+		},
+		{
+			type:'custom',
+			prop:'mailAuth'
+		},
+		{
+			type:'input',
+			label: '用户名',
+			prop: 'mailUser',
+			rules: { required: true, message: '请填写用户名' }
+		},
+		{
+			type:'input',
+			label: '密码',
+			prop: 'mailPass',
+			rules: { required: true, message: '请填写密码' }
+		},
+		{
+			type:'input',
+			label: '收件人',
+			prop: 'mailTo',
+			placeholder: '收件人，多个收件人逗号或者分号隔开',
+			rules: { required: true, message: '请填写收件人' }
+		}
+	]
+	const { loading:loadingDetail, onSuccess:onSuccessDetail, onError:onErrorDetail, send:sendDetail } = useAxios(getMail,{
+		immediate:false
+	});
+	
+	//初始
+	const on_init = ()=> {
+		sendDetail()
+		onSuccessDetail((res)=>{
+			if(res.data){
+				for(let keys in ruleForm){
+					ruleForm[keys] = res.data[keys] ?? ''
+				}
+			}
+			
+		})
+		onErrorDetail((res)=>{
+			ElNotification.error({
+				title: '提示',
+				message:  res.message || '数据异常！',
+				duration: 3000
+			})
+		})
+	}
+	on_init()
+	
+	//关闭
+	const RefTform = ref(null)
+	const close = ()=>{
+		RefTform.value?.resetForm()
+	}
+	
+	const { loading, data, onSuccess, onError, send } = useAxios(setMailUpdate,{
+		immediate:false
+	});
+	onSuccess((res)=>{
+		ElNotification.success({
+			title: '提示',
+			message: res.message || '修改成功!',
+			duration: 3000
+		})
+	})
+	onError((res)=>{
+		ElNotification.error({
+			title: '提示',
+			message:  res.message || '修改失败！',
+			duration: 3000
+		})
+	})
+	
+	//提交
+	const submit = (type)=>{
+		let data = {
+			...ruleForm
+		}
+		send(data)
+	}
+	
+	//确认
+	const confirm = ()=>{
+		RefTform.value?.submitForm()
+	}
+	
+	
 </script>
 
-<style lang="scss" scoped>
-:deep(.arco-grid) {
-  flex-wrap: wrap;
-}
-:deep(.arco-grid-item) {
-  min-width: 250px;
-}
-:deep(.arco-alert-success) {
-  padding: 14px 16px;
-  border-color: rgb(var(--success-6));
-  background-color: rgba(var(--success-6), 0.08);
-  .arco-alert-content {
-    color: rgb(var(--success-6));
-    font-size: 12px;
-  }
-}
-.collapsed-btn {
-  &:hover,
-  &:active {
-    background: none;
-  }
-}
-.table-page {
-  height: 100%;
-  overflow: hidden;
-  margin: $margin;
-  background: var(--color-bg-1);
-  padding: $padding;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  .form {
-    margin-top: 12px;
-    :deep(.arco-form-item) {
-      margin-bottom: 10px;
-    }
-  }
-}
+<template>
+	<div>
+		<div class="content content_form">
+			<Tform ref="RefTform" :loading="loading" :ruleForm="ruleForm" :listInput="listInput" @submit="submit" label_width="120px" querytext='修改'>
+				<template #mailAuth="scope">
+					<el-form-item label="是否认证" prop="mailAuth" label-width="120px">
+						<el-switch
+						    v-model="ruleForm.mailAuth"
+							active-text="是"
+							inactive-text="否"
+							inline-prompt
+						  />
+					</el-form-item>
+				</template>
+				
+			</Tform>
+		</div>
+	</div>
+		
+</template>
+
+
+<style scoped>
+	.fixed_width_box{
+		display: flex;
+		border-bottom: 1px solid #eee;
+		padding-top: 10px;
+	}
+	.fixed_width{
+		display: flex;
+		flex-direction: column;
+	}
 </style>

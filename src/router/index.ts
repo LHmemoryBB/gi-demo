@@ -15,7 +15,8 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    meta: { title: '首页', icon: 'HomeFilled' },
+    meta: { title: '壹壹中控后台', icon: 'HomeFilled',  },
+    redirect:'noRedirect',
     component: Layout,
     children: [{ path: '/', name: 'case', component: () => import('@/views/config/index.vue') }]
   },

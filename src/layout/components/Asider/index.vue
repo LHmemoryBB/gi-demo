@@ -2,7 +2,7 @@
   <div class="asider">
     <Logo :collapse="collapse"></Logo>
     <a-layout-sider collapsible breakpoint="xl" :width="232" class="menu" @collapse="handleCollapse">
-      <a-menu :selected-keys="[`/${activeMenu}`]" :auto-open-selected="true" :style="{ width: '100%', height: '100%' }">
+      <a-menu :selected-keys="[activeMenu]" :auto-open-selected="true" :style="{ width: '100%', height: '100%' }">
         <SidebarItem
           v-for="(route, index) in sidebarRoutes"
           :key="route.path + index"
@@ -19,7 +19,7 @@ import { usePermissionStore } from '@/store'
 import SidebarItem from './SidebarItem.vue'
 import { useUserStore } from '@/store'
 import Logo from './Logo.vue'
-import { getUserRoutes } from '@/apis'
+import { getUserRoutes } from '@/api/index'
 const route = useRoute()
 const userStore = useUserStore()
 const router = useRouter()
@@ -32,11 +32,8 @@ const handleCollapse = (isCollapse: boolean) => {
 
 // 当前页面激活菜单路径，先从路由里面找
 const activeMenu = computed(() => {
-  const { meta, path } = route
-  if (meta) {
-    return meta.title
-  }
-  return path
+  const {fullPath} = route
+  return fullPath
 })
 </script>
 

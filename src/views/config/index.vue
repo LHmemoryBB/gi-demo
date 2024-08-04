@@ -1,197 +1,341 @@
-<template>
-  <div class="table-page">
-    <a-form label-align="right" auto-label-width :model="form" class="form">
-      <a-row :gutter="16" wrap>
-        <a-col :xs="12" :md="12" :lg="8" :xl="6" :xxl="6">
-          <a-form-item field="value1" label="姓名">
-            <a-input v-model="form.value1" placeholder="请输入姓名" />
-          </a-form-item>
-        </a-col>
-        <a-col :xs="12" :md="12" :lg="8" :xl="6" :xxl="6">
-          <a-form-item field="value2" label="手机">
-            <a-input v-model="form.value2" placeholder="请输入手机号码" />
-          </a-form-item>
-        </a-col>
-        <a-col :xs="12" :md="12" :lg="8" :xl="6" :xxl="6" v-show="collapsed">
-          <a-form-item field="value3" label="类型">
-            <a-select placeholder="请选择">
-              <a-option>北京</a-option>
-              <a-option>上海</a-option>
-              <a-option>广州</a-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :xs="12" :md="12" :lg="8" :xl="6" :xxl="6" v-show="collapsed">
-          <a-form-item field="value3" label="时间">
-            <a-date-picker show-time v-model="form.value3" placeholder="请选择创建时间" style="width: 100%" />
-          </a-form-item>
-        </a-col>
-        <a-col :xs="12" :md="12" :lg="8" :xl="6" :xxl="6" v-show="collapsed">
-          <a-form-item field="value4" label="状态">
-            <a-select placeholder="请选择">
-              <a-option>开启</a-option>
-              <a-option>关闭</a-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :xs="12" :md="12" :lg="8" :xl="6" :xxl="6" v-show="collapsed">
-          <a-form-item field="value5" label="地址">
-            <a-input v-model="form.value5" placeholder="请输入查询地址" />
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-space>
-            <a-button type="primary" @click="getTableData">
-              <template #icon>
-                <icon-search />
-              </template>
-              <template #default>查询</template>
-            </a-button>
-            <a-button>
-              <template #default>重置</template>
-            </a-button>
-            <a-button type="text" class="collapsed-btn" @click="collapsed = !collapsed">
-              <template #icon>
-                <icon-up v-if="collapsed" />
-                <icon-down v-else />
-              </template>
-              <template #default>{{ !collapsed ? '展开' : '收起' }}</template>
-            </a-button>
-          </a-space>
-        </a-col>
-      </a-row>
-    </a-form>
+<script setup>
+import { ref, reactive, toRaw, defineAsyncComponent } from "vue";
+import Tform from "@/components/GiForm/index.vue";
+import TuploadImg from "@/components/GiUpload/ImageUploader.vue";
+import TuploadPdf from "@/components/GiUpload/fileUpload.vue";
+import { useAxios } from '@/hooks'
+import {
+  up_singleImg,
+  up_singlePdf,
+  getConfigDetail,
+  setConfigUpdate,
+} from "@/api/index";
 
-    <div class="gi_table_box">
-      <a-table
-        row-key="id"
-        size="small"
-        page-position="bottom"
-        :bordered="{ cell: true }"
+const _state = () => ({
+  domainName: "",
+  companyName: "",
+  customerPhone: "",
+  id: 1,
+  logo: [],
+  officialAccount: [],
+  businessAccount: [],
+  apiPdf: [],
+  platformName: "",
+  recordNumber: "",
+  gaRecordNumber: "",
+  xkRecordNumber: "",
+});
+const ruleForm = reactive(_state());
+const listInput = [
+  {
+    type: "input",
+    label: "域名",
+    prop: "domainName",
+    rules: { required: true, message: "请输入域名" },
+  },
+  {
+    type: "input",
+    label: "公司名称",
+    prop: "companyName",
+    rules: { required: true, message: "请输入公司名称" },
+  },
+  {
+    type: "input",
+    label: "客服电话",
+    prop: "customerPhone",
+    rules: { required: true, message: "请输入客服电话" },
+  },
+  {
+    type: "custom",
+    prop: "logo",
+  },
+  {
+    type: "custom",
+    prop: "officialAccount",
+  },
+  {
+    type: "custom",
+    prop: "businessAccount",
+  },
+  {
+    type: "custom",
+    prop: "apiPdf",
+  },
+  {
+    type: "input",
+    label: "平台名称",
+    prop: "platformName",
+    rules: { required: true, message: "请输入平台名称" },
+  },
+  {
+    type: "input",
+    label: "网站备案号",
+    prop: "recordNumber",
+    rules: { required: true, message: "请输入网站备案号" },
+  },
+  {
+    type: "input",
+    label: "公安备案号",
+    prop: "gaRecordNumber",
+    rules: { required: true, message: "请输入公安备案号" },
+  },
+  {
+    type: "input",
+    label: "许可证备案号",
+    prop: "xkRecordNumber",
+    rules: { required: true, message: "请输入许可证备案号" },
+  },
+];
+const {
+  loading: loadingDetail,
+  onSuccess: onSuccessDetail,
+  onError: onErrorDetail,
+  send: sendDetail,
+} = useAxios(getConfigDetail, {
+  immediate: false,
+});
+
+//初始
+const on_init = () => {
+  sendDetail();
+  onSuccessDetail((res) => {
+    for (let keys in ruleForm) {
+      if (
+        ["logo", "officialAccount", "businessAccount", "apiPdf"].includes(keys)
+      ) {
+        ruleForm[keys] = [];
+      } else {
+        ruleForm[keys] = res.data[keys] ?? "";
+      }
+    }
+    if ("" != res.data.logo) {
+      ruleForm.logo = [
+        {
+          name: res.data.logo ?? "",
+          uid: res.data.logo ?? "",
+          url: res.data.logo ?? "",
+          response: [res.data.logo ?? ""],
+        },
+      ];
+    }
+    if ("" != res.data.officialAccount) {
+      ruleForm.officialAccount = [
+        {
+          name: res.data.officialAccount ?? "",
+          uid: res.data.officialAccount ?? "",
+          url: res.data.officialAccount ?? "",
+          response: [res.data.officialAccount ?? ""],
+        },
+      ];
+    }
+    if ("" != res.data.businessAccount) {
+      ruleForm.businessAccount = [
+        {
+          name: res.data.businessAccount ?? "",
+          uid: res.data.businessAccount ?? "",
+          url: res.data.businessAccount ?? "",
+          response: [res.data.businessAccount ?? ""],
+        },
+      ];
+    }
+    if ("" != res.data.apiPdf) {
+      ruleForm.apiPdf = [
+        {
+          name: res.data.apiPdf ?? "",
+          uid: res.data.apiPdf ?? "",
+          url: res.data.apiPdf ?? "",
+          response: [res.data.apiPdf ?? ""],
+        },
+      ];
+    }
+  });
+  onErrorDetail((res) => {
+    ElNotification.error({
+      title: "提示",
+      message: res.message || "数据异常！",
+      duration: 3000,
+    });
+  });
+};
+on_init();
+
+//关闭
+const RefTform = ref(null);
+const close = () => {
+  RefTform.value?.resetForm();
+};
+
+const { loading, data, onSuccess, onError, send } = useAxios(setConfigUpdate, {
+  immediate: false,
+});
+onSuccess((res) => {
+  ElNotification.success({
+    title: "提示",
+    message: res.message || "修改成功!",
+    duration: 3000,
+  });
+});
+onError((res) => {
+  ElNotification.error({
+    title: "提示",
+    message: res.message || "修改失败！",
+    duration: 3000,
+  });
+});
+
+//提交
+const submit = (type) => {
+  console.log(123123213);
+  
+  let data = {
+    ...ruleForm,
+    logo: ruleForm.logo[0].response.data ?? ruleForm.logo[0].response[0],
+    officialAccount:
+      ruleForm.officialAccount[0].response.data ??
+      ruleForm.officialAccount[0].response[0],
+    businessAccount:
+      ruleForm.businessAccount[0].response.data ??
+      ruleForm.businessAccount[0].response[0],
+    apiPdf: ruleForm.apiPdf[0].response.data ?? ruleForm.apiPdf[0].response[0],
+  };
+  send(data);
+};
+
+//确认
+const confirm = () => {
+  RefTform.value?.submitForm();
+};
+
+//上传
+const pathSuccess = (response, file, fileList, keys) => {
+  ruleForm[keys] = fileList;
+};
+
+//删除
+const pathRemove = (file, fileList, keys) => {
+  ruleForm[keys] = fileList;
+};
+</script>
+
+<template>
+  <div>
+    <div class="table-page">
+      <Tform
+        ref="RefTform"
         :loading="loading"
-        :data="tableData"
-        :scroll="{ x: '100%', y: '100%', minWidth: 1000 }"
-        :pagination="{ showPageSize: true, total: total, current: current, pageSize: pageSize }"
-        @page-change="changeCurrent"
-        @page-size-change="changePageSize"
+        :ruleForm="ruleForm"
+        :listInput="listInput"
+        @submit="submit"
+        label_width="120px"
+        querytext="修改"
       >
-        <template #columns>
-          <a-table-column title="序号" :width="66" align="center">
-            <template #cell="cell">{{ cell.rowIndex + 1 }}</template>
-          </a-table-column>
-          <a-table-column title="姓名" data-index="name" :width="120"></a-table-column>
-          <a-table-column title="头像" :width="80">
-            <template #cell="{ record }">
-              <a-avatar :size="30" :style="{ backgroundColor: record.color }">{{ record.name[0] }}</a-avatar>
-            </template>
-          </a-table-column>
-          <a-table-column title="手机号" data-index="phone" :width="150"></a-table-column>
-          <a-table-column title="创建时间" data-index="createTime" ellipsis tooltip></a-table-column>
-          <a-table-column title="地址" data-index="address" ellipsis tooltip></a-table-column>
-          <a-table-column title="状态" :width="100" align="center">
-            <template #cell="{ record }">
-              <a-typography-text v-if="record.status" type="success">开启</a-typography-text>
-              <a-typography-text v-else type="danger">关闭</a-typography-text>
-            </template>
-          </a-table-column>
-          <a-table-column title="操作" :width="200" align="left">
-            <template #cell="{ record }">
-              <a-space>
-                <a-button type="primary" size="mini" v-hasPerm="['table:btn:edit']">
-                  <span>编辑</span>
-                </a-button>
-                <a-button size="mini">
-                  <span>详情</span>
-                </a-button>
-                <a-popconfirm type="warning" content="您确定要删除该项吗?">
-                  <a-button type="primary" status="danger" size="mini">
-                    <span>删除</span>
-                  </a-button>
-                </a-popconfirm>
-              </a-space>
-            </template>
-          </a-table-column>
+        <template #logo="scope">
+          <a-form-item
+            label="用户头像"
+            :prop="'logo'"
+            :rules="{ required: true, message: '请添加图片' }"
+            label-width="120px"
+          >
+            <TuploadImg
+              :up_img_api="up_singleImg"
+              :fileList="ruleForm.logo"
+              :size="1024 * 1024"
+              sizeName="1MB"
+              :limit="1"
+              multiple
+              @pathSuccess="
+                (response, file, fileList) =>
+                  pathSuccess(response, file, fileList, 'logo')
+              "
+              @pathRemove="
+                (file, fileList) => pathRemove(file, fileList, 'logo')
+              "
+            ></TuploadImg>
+          </a-form-item>
         </template>
-      </a-table>
+        <template #officialAccount="scope">
+          <a-form-item
+            label="公众号"
+            :prop="'officialAccount'"
+            :rules="{ required: true, message: '请添加图片' }"
+            label-width="120px"
+          >
+            <TuploadImg
+              :up_img_api="up_singleImg"
+              :fileList="ruleForm.officialAccount"
+              :size="1024 * 1024"
+              sizeName="1MB"
+              :limit="1"
+              multiple
+              @pathSuccess="
+                (response, file, fileList) =>
+                  pathSuccess(response, file, fileList, 'officialAccount')
+              "
+              @pathRemove="
+                (file, fileList) =>
+                  pathRemove(file, fileList, 'officialAccount')
+              "
+            ></TuploadImg>
+          </a-form-item>
+        </template>
+        <template #businessAccount="scope">
+          <a-form-item
+            label="商户号"
+            :prop="'businessAccount'"
+            :rules="{ required: true, message: '请添加图片' }"
+            label-width="120px"
+          >
+            <TuploadImg
+              :up_img_api="up_singleImg"
+              :fileList="ruleForm.businessAccount"
+              :size="1024 * 1024"
+              sizeName="1MB"
+              :limit="1"
+              multiple
+              @pathSuccess="
+                (response, file, fileList) =>
+                  pathSuccess(response, file, fileList, 'businessAccount')
+              "
+              @pathRemove="
+                (file, fileList) =>
+                  pathRemove(file, fileList, 'businessAccount')
+              "
+            ></TuploadImg>
+          </a-form-item>
+        </template>
+        <template #apiPdf="scope">
+          <a-form-item
+            label="API文档"
+            :prop="'apiPdf'"
+            :rules="{ required: true, message: '请上传pdf文件' }"
+            label-width="120px"
+          >
+            <TuploadPdf
+              :action="up_singlePdf"
+              :fileList="ruleForm.apiPdf"
+              @pathSuccess="
+                (response, file, fileList) =>
+                  pathSuccess(response, file, fileList, 'apiPdf')
+              "
+              @pathRemove="
+                (file, fileList) => pathRemove(file, fileList, 'apiPdf')
+              "
+            ></TuploadPdf>
+          </a-form-item>
+        </template>
+      </Tform>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import { usePagination } from '@/hooks'
-import { getPersonList } from '@/apis'
-import type { PersonItem } from '@/apis'
-
-defineOptions({ name: 'TableMain' })
-
-const form = reactive({
-  value1: '',
-  value2: '',
-  value3: '',
-  value4: '',
-  value5: ''
-})
-
-const loading = ref(false)
-const tableData = ref<PersonItem[]>([])
-const collapsed = ref(false)
-
-const { current, pageSize, total, changeCurrent, changePageSize, setTotal } = usePagination(() => getTableData())
-
-const getTableData = async () => {
-  try {
-    loading.value = true
-    const res = await getPersonList({
-      current: current.value,
-      pageSize: pageSize.value
-    })
-    tableData.value = res.data.list
-    setTotal(res.data.total)
-  } catch (error) {
-  } finally {
-    loading.value = false
-  }
+<style scoped>
+.fixed_width_box {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  padding-top: 10px;
 }
-
-getTableData()
-</script>
-
-<style lang="scss" scoped>
-:deep(.arco-grid) {
-  flex-wrap: wrap;
-}
-:deep(.arco-grid-item) {
-  min-width: 250px;
-}
-:deep(.arco-alert-success) {
-  padding: 14px 16px;
-  border-color: rgb(var(--success-6));
-  background-color: rgba(var(--success-6), 0.08);
-  .arco-alert-content {
-    color: rgb(var(--success-6));
-    font-size: 12px;
-  }
-}
-.collapsed-btn {
-  &:hover,
-  &:active {
-    background: none;
-  }
-}
-.table-page {
-  height: 100%;
-  overflow: hidden;
-  margin: $margin;
-  background: var(--color-bg-1);
-  padding: $padding;
-  box-sizing: border-box;
+.fixed_width {
   display: flex;
   flex-direction: column;
-  .form {
-    margin-top: 12px;
-    :deep(.arco-form-item) {
-      margin-bottom: 10px;
-    }
-  }
 }
 </style>

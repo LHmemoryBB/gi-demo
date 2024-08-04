@@ -4,6 +4,10 @@ import pinia from '@/store'
 import App from './App.vue'
 import router from './router'
 
+
+import '@/assets/css/index.scss';
+import 'ant-design-vue/dist/reset.css';
+
 // 引入 Arco Design 组件库以及自定义主题
 import ArcoVue from '@arco-design/web-vue'
 import '@/styles/arco-ui/index.less'
@@ -12,9 +16,6 @@ import '@/styles/arco-ui/index.less'
 
 // 额外引入 Arco Design Icon图标库
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
-
-import '@/router/permission'
-
 // 使用动画库
 import 'animate.css/animate.min.css'
 
@@ -49,3 +50,5 @@ app.use(directives)
 // })
 
 app.mount('#app')
+
+

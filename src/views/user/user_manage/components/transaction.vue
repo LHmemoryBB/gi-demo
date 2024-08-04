@@ -2,7 +2,7 @@
 	import { ref, reactive, defineEmits, defineExpose } from 'vue'
 	import Tdialog from '@/components/Templates/Tdialog.vue';
 	import Ttable from '@/components/Templates/Ttable.vue';
-	import useAxios from '@/hooks/useAxios'
+	import { useAxios } from '@/hooks'
 	import { setUserTransaction } from '@/api/index'
 	
 	const emit = defineEmits();

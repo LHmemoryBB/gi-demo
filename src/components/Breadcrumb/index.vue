@@ -18,9 +18,9 @@ function getBreadcrumbList() {
   // 只显示有title标题的
   const matched = route.matched.filter((item) => item.meta && item.meta.title)
   const first = matched[0]
-  if (!isHome(first)) {
-    matched.unshift({ path: '/', meta: { title: '首页' } } as RouteLocationMatched)
-  }
+  // if (!isHome(first)) {
+  //   matched.unshift({ path: '/', meta: { title: '首页' } } as RouteLocationMatched)
+  // }  
   breadcrumbList.value = matched.filter((item) => item.meta && item.meta.title && item.meta.breadcrumb !== false)
 }
 getBreadcrumbList()

@@ -2,7 +2,7 @@
 	import { ref, reactive, defineEmits, defineExpose } from 'vue'
 	import Tdialog from '@/components/Templates/Tdialog.vue';
 	import Tform from '@/components/Templates/Tform.vue';
-	import useAxios from '@/hooks/useAxios'
+	import { useAxios } from '@/hooks'
 	import { setUserBalance } from '@/api/index'
 	
 	const emit = defineEmits();

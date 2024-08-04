@@ -1,14 +1,14 @@
 <script setup>
 import { reactive, ref, defineAsyncComponent } from "vue";
-import useAxios from "@/hooks/useAxios";
+import { useAxios } from '@/hooks'
 import { AfterSalequery } from "@/api/index";
-import Tform from "@/components/Templates/Tform.vue";
+import Tform from "@/components/GiForm/index.vue";
 import Ttable from "@/components/Templates/Ttable.vue";
 import Tselect from "@/components/Templates/Tselect.vue";
 // import orderDetail from "./components/detail.vue";
 
 const orderDetail = defineAsyncComponent(() => import('./components/detail.vue'))
-const ruleForm = reactive({
+let ruleForm = reactive({
   //   userId: "",
   afterSaleStatus: 1,
 });

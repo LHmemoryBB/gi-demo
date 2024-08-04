@@ -2,7 +2,7 @@
 	import { ref, reactive, toRaw , defineEmits, defineExpose } from 'vue'
 	import Tdialog from '@/components/Templates/Tdialog.vue';
 	import Tform from '@/components/Templates/Tform.vue';
-	import useAxios from '@/hooks/useAxios'
+	import { useAxios } from '@/hooks'
 	import { setResetPassword } from '@/api/index'
 	import md5 from 'js-md5';
 	

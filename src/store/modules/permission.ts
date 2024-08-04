@@ -4,7 +4,7 @@ import type { RouteRecordRaw } from 'vue-router'
 // import router, { constantRoutes, asyncRoutes as dynamicRoutes } from '@/router'
 import Layout from '@/layout/index.vue'
 import ParentView from '@/components/ParentView/index.vue'
-import { getUserRoutes } from '@/apis'
+import { getUserRoutes } from '@/api/index'
 import Has from '@/utils/has'
 
 // 匹配views里面所有的.vue文件

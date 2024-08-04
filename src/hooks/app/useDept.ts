@@ -1,6 +1,6 @@
 import { ref } from 'vue'
-import { getSystemDeptList } from '@/apis'
-import type { DeptItem } from '@/apis'
+import { getSystemDeptList } from '@/api/index'
+import type { DeptItem } from '@/api/index'
 
 /** 部门模块 */
 export function useDept() {

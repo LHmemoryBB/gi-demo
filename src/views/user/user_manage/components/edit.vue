@@ -2,9 +2,9 @@
 	import { ref, reactive, toRaw , defineEmits, defineExpose } from 'vue'
 	import Tdialog from '@/components/Templates/Tdialog.vue';
 	import Tform from '@/components/Templates/Tform.vue';
-	import useAxios from '@/hooks/useAxios'
+	import { useAxios } from '@/hooks'
 	import { up_image, setUserEdit } from '@/api/index'
-	import TuploadImg from '@/components/Templates/TuploadImg.vue'
+	import TuploadImg from '@/components/GiUpload/ImageUploader.vue'
 	
 	const emit = defineEmits();
 	let Update = reactive({

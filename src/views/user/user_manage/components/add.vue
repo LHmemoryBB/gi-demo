@@ -2,9 +2,9 @@
 	import { ref, reactive, defineEmits, defineExpose } from 'vue'
 	import Tdialog from '@/components/Templates/Tdialog.vue';
 	import Tform from '@/components/Templates/Tform.vue';
-	import useAxios from '@/hooks/useAxios'
+	import { useAxios } from '@/hooks'
 	import { up_image, setUserAdd } from '@/api/index'
-	import TuploadImg from '@/components/Templates/TuploadImg.vue'
+	import TuploadImg from '@/components/GiUpload/ImageUploader.vue'
 	import md5 from 'js-md5';
 	
 	const emit = defineEmits();

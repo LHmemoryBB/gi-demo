@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { Message } from '@arco-design/web-vue'
-import { getCateTreeData, type CateItem } from '@/apis'
+import { getCateTreeData, type CateItem } from '@/api/index'
 import TreeSwitcherIcon from './TreeSwitcherIcon.vue'
 import RightMenu from './RightMenu.vue'
 

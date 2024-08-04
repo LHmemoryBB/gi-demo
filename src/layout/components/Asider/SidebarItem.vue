@@ -22,7 +22,6 @@
         </a-menu-item>
       </SideLink>
     </template>
-
     <a-sub-menu v-else :key="item.path">
       <template #icon>
         <GiSvgIcon name="menu-home" :size="24"></GiSvgIcon>
@@ -32,7 +31,6 @@
       <template #title>
         <span>{{ item.meta.title }}</span>
       </template>
-
       <SidebarItem
         v-for="child in item.children"
         :key="child.path"
