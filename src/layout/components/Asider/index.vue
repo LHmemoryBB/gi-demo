@@ -1,8 +1,8 @@
 <template>
   <div class="asider">
     <Logo :collapse="collapse"></Logo>
-    <a-layout-sider collapsible breakpoint="xl" :width="232" class="menu" @collapse="handleCollapse">
-      <a-menu :selected-keys="[activeMenu]" :auto-open-selected="true" :style="{ width: '100%', height: '100%' }">
+    <a-layout-sider breakpoint="xl" :width="232" class="menu" @collapse="handleCollapse">
+      <a-menu :selected-keys="[activeMenu]" mode="inline" :auto-open-selected="true" :style="{ width: '100%', height: '100%' }">
         <SidebarItem
           v-for="(route, index) in sidebarRoutes"
           :key="route.path + index"
@@ -38,17 +38,17 @@ const activeMenu = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-:deep(.arco-menu.arco-menu-vertical.arco-menu-collapsed) {
+:deep(.ant-menu.ant-menu-vertical.ant-menu-collapsed) {
   // Menu菜单组件修改
-  .arco-menu-icon {
+  .ant-menu-icon {
     margin-right: 0;
     padding: 10px 0;
   }
-  .arco-menu-has-icon {
+  .ant-menu-has-icon {
     padding: 0;
     justify-content: center;
   }
-  .arco-menu-title {
+  .ant-menu-title {
     display: none;
   }
 }
@@ -59,8 +59,8 @@ const activeMenu = computed(() => {
   flex-direction: column;
   border-right: 1px solid var(--color-border-2);
   .menu {
-    flex: 1;
-    overflow: hidden;
+    flex: 1 !important;
+    // overflow: hidden;
   }
 }
 </style>

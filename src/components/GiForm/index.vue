@@ -160,7 +160,7 @@ defineExpose({
 </template>
 
 <style scoped>
-.arco-input-wrapper {
+.ant-input-affix-wrapper {
   width: 200px;
 }
 .a-form--inline .a-form-item {

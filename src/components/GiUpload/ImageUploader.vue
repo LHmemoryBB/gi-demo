@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { ref, defineEmits, defineProps } from 'vue';
-import { Message } from '@arco-design/web-vue';
+import { message } from 'ant-design-vue';
 import { getToken } from '@/utils/auth'; // 请根据实际路径调整
 
 const emit = defineEmits(['pathSuccess', 'pathRemove']);
@@ -99,7 +99,7 @@ const setHeaders = () => {
   overflow: hidden;
   transition: var(--el-transition-duration-fast);
 }
-:deep(.arco-upload-list-picture){
+:deep(.ant-upload-list-picture){
   border:  1px dashed #E5E6EB;
 }
 .hide .a-upload--picture-card {

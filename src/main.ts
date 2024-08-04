@@ -4,18 +4,16 @@ import pinia from '@/store'
 import App from './App.vue'
 import router from './router'
 
-
 import '@/assets/css/index.scss';
 import 'ant-design-vue/dist/reset.css';
 
 // 引入 Arco Design 组件库以及自定义主题
-import ArcoVue from '@arco-design/web-vue'
-import '@/styles/arco-ui/index.less'
+import Antd from 'ant-design-vue'
 // import '@arco-themes/vue-gi-demo/index.less'
 // import '@arco-design/web-vue/dist/arco.css'
 
 // 额外引入 Arco Design Icon图标库
-import ArcoVueIcon from '@arco-design/web-vue/es/icon'
+// import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 // 使用动画库
 import 'animate.css/animate.min.css'
 
@@ -35,8 +33,8 @@ const app = createApp(App)
 
 app.use(router)
 app.use(pinia)
-app.use(ArcoVue)
-app.use(ArcoVueIcon)
+app.use(Antd)
+// app.use(ArcoVueIcon)
 app.use(directives)
 
 // 全局注册自定义组件(注：一定要定义组件的name！！！)

@@ -1,8 +1,8 @@
 <template>
   <span class="gi-more-icon-wrap">
     <span class="gi-more-icon">
-      <i class="block block-top"></i>
-      <i class="block block-bottom"></i>
+      <span class="block block-top"></span>
+      <span class="block block-bottom"></span>
     </span>
   </span>
 </template>
@@ -19,7 +19,7 @@
   position: relative;
 
   &::before {
-    content: '';
+    content: "";
     width: 26px;
     height: 26px;
     position: absolute;
@@ -30,7 +30,7 @@
 
   .gi-more-icon {
     display: inline-block;
-    color: var(--color-text-2);
+    // color: var(--color-text-2);
     cursor: pointer;
     transition: transform 0.3s ease-out;
 
@@ -53,7 +53,7 @@
       left: 0;
       width: 6px;
       height: 6px;
-      content: '';
+      content: "";
       background: var(--color-text-3);
     }
 
@@ -62,7 +62,7 @@
       left: 8px;
       width: 6px;
       height: 6px;
-      content: '';
+      content: "";
       background: var(--color-text-3);
     }
   }

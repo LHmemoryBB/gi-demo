@@ -22,5 +22,6 @@ defineOptions({ name: 'Layout' })
 .layout {
   height: 100%;
   flex-direction: row;
+  background: #FFFFFF;
 }
 </style>

@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@/store'
 import { useLoading } from '@/hooks'
-import { Message, type FormInstance } from '@arco-design/web-vue'
+import { message, type FormInstance } from 'ant-design-vue'
 import LoginBg from './components/LoginBg/index.vue'
 import * as Regexp from '@/utils/regexp'
 import Verify from '@/components/verifition/Verify.vue'

@@ -39,10 +39,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-body[arco-theme='dark'] #app {
-  background-color: var(--color-bg-5);
-}
-
 ul {
   list-style: none !important;
   margin-bottom: 0;

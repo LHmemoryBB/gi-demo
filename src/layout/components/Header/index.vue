@@ -1,6 +1,6 @@
 <template>
   <a-layout-header>
-    <a-row align="center" class="h-100">
+    <a-row align="middle" class="h-100">
       <a-col :xs="0" :md="10" :lg="10" :xl="12" :xxl="12">
         <Breadcrumb></Breadcrumb>
       </a-col>
@@ -8,10 +8,11 @@
         <a-row justify="end" align="center">
           <a-space size="medium">
             <!-- 项目配置 -->
-            <a-tooltip content="项目配置" position="bl">
+            <a-tooltip>
+              <template #title>项目配置</template>
               <a-button size="mini" class="gi_hover_btn" @click="SettingDrawerRef?.open">
                 <template #icon>
-                  <icon-settings :size="18" />
+                  <SettingOutlined  :size="18"/>
                 </template>
               </a-button>
             </a-tooltip>
@@ -21,7 +22,7 @@
               <a-badge :count="9" dot>
                 <a-button size="mini" class="gi_hover_btn">
                   <template #icon>
-                    <icon-notification :size="18" />
+                    <BellOutlined  :size="18" />
                   </template>
                 </a-button>
               </a-badge>
@@ -31,17 +32,19 @@
             </a-popover>
 
             <!-- 全屏切换组件 -->
-            <a-tooltip v-if="!_XEUtils_.browse().isMobile" content="全屏切换" position="bottom">
+            <a-tooltip v-if="!_XEUtils_.browse().isMobile">
+              <template #title>全屏切换</template>
               <a-button size="mini" class="gi_hover_btn" @click="onToggleFullScreen">
                 <template #icon>
-                  <icon-fullscreen :size="18" v-if="!isFullScreen" />
-                  <icon-fullscreen-exit :size="18" v-else />
+                  <FullscreenOutlined :size="18" v-if="!isFullScreen" />
+                  <FullscreenExitOutlined :size="18" v-else />
                 </template>
               </a-button>
             </a-tooltip>
 
             <!-- 暗黑模式切换 -->
             <a-tooltip content="主题切换" position="bottom">
+              <template #title>主题切换</template>
               <GiThemeBtn></GiThemeBtn>
             </a-tooltip>
 
@@ -53,28 +56,24 @@
                   <img :src="userStore.userInfo.avatar" />
                 </a-avatar>
                 <span class="username">{{ userStore.userName }}</span>
-                <icon-down />
+                <DownOutlined />
               </a-row>
-              <template #content>
-                <a-doption @click="toUser">
-                  <template #icon>
-                    <span class="doption-icon primary"><icon-user /></span>
-                  </template>
-                  <span>个人中心</span>
-                </a-doption>
-                <a-doption @click="toGitPath">
-                  <template #icon>
-                    <span class="doption-icon success"><icon-github /></span>
-                  </template>
-                  <span>项目地址</span>
-                </a-doption>
-                <a-divider style="margin: 0" />
-                <a-doption @click="logout">
-                  <template #icon>
-                    <span class="doption-icon warning"><icon-export /></span>
-                  </template>
-                  <span>退出登录</span>
-                </a-doption>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item @click="toUser">
+                    <template #icon>
+                      <span class="doption-icon primary"><UserOutlined /></span>
+                    </template>
+                    <span>个人中心</span>
+                  </a-menu-item>
+                  <a-divider style="margin: 0" />
+                  <a-menu-item @click="logout">
+                    <template #icon>
+                      <span class="doption-icon warning"><LogoutOutlined /></span>
+                    </template>
+                    <span>退出登录</span>
+                  </a-menu-item>
+                </a-menu>
               </template>
             </a-dropdown>
           </a-space>
@@ -87,13 +86,13 @@
 </template>
 
 <script setup lang="ts" name="Header">
-import { Modal } from '@arco-design/web-vue'
+import { Modal } from 'ant-design-vue'
 import { useUserStore } from '@/store'
 import { useFullScreen } from '@/hooks'
 import SettingDrawer from './SettingDrawer.vue'
 import Message from './Message.vue'
 import _XEUtils_ from 'xe-utils'
-
+import {SettingOutlined, BellOutlined, FullscreenOutlined, FullscreenExitOutlined, LogoutOutlined, UserOutlined, DownOutlined } from '@ant-design/icons-vue'
 const router = useRouter()
 const userStore = useUserStore()
 const { isFullScreen, onToggleFullScreen } = useFullScreen()
@@ -117,15 +116,10 @@ const logout = () => {
     }
   })
 }
-
-// 跳转项目地址
-const toGitPath = () => {
-  window.open('https://gitee.com/lin0716/gi-demo')
-}
 </script>
 
 <style lang="scss" scoped>
-.arco-dropdown-open .arco-icon-down {
+.ant-dropdown-open .ant-icon-down {
   transform: rotate(180deg);
 }
 
@@ -136,7 +130,7 @@ const toGitPath = () => {
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  color: #fff;
+  // color: #fff;
   border-radius: 4px;
   &.primary {
     background-color: rgba(var(--primary-6));
@@ -149,7 +143,7 @@ const toGitPath = () => {
   }
 }
 
-.arco-layout-header {
+.ant-layout-header {
   // padding: 0 $padding;
   height: 56px;
   background: var(--color-bg-1);
@@ -160,7 +154,7 @@ const toGitPath = () => {
       margin-left: 10px;
       white-space: nowrap;
     }
-    .arco-icon-down {
+    .ant-icon-down {
       transition: all 0.3s;
       margin-left: 2px;
     }
