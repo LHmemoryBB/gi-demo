@@ -53,13 +53,6 @@ export default defineConfig(({ command, mode }) => {
     },
     base: env.VITE_PUBLIC_PATH,
     // 引入sass全局样式变量
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: `@import "@/styles/var.scss";`
-        }
-      }
-    },
     server: {
       proxy: {
         "/api": {
