@@ -116,6 +116,6 @@ const handleTabClick = (key: string) => {
 }
 
 .mr {
-  margin-right: $margin;
+  // margin-right: $margin;
 }
 </style>

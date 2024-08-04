@@ -84,7 +84,7 @@ defineExpose({
   overflow: hidden;
   background: var(--color-bg-1);
   &.fullscreen {
-    padding: $padding;
+    // padding: $padding;
   }
   .table-box {
     flex: 1;

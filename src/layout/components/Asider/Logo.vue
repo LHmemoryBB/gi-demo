@@ -61,7 +61,7 @@ const toHome = () => {
     white-space: nowrap;
     transition: color 0.3s;
     &:hover {
-      color: $color-theme !important;
+      // color: $color-theme !important;
       cursor: pointer;
     }
   }
