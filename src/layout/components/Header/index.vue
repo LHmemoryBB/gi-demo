@@ -5,7 +5,7 @@
         <Breadcrumb></Breadcrumb>
       </a-col>
       <a-col :xs="24" :md="14" :lg="14" :xl="12" :xxl="12">
-        <a-row justify="end" align="center">
+        <a-row justify="end" align="middle">
           <a-space size="medium">
             <!-- 项目配置 -->
             <a-tooltip>
@@ -50,7 +50,7 @@
 
             <!-- 管理员账户 -->
             <a-dropdown trigger="hover">
-              <a-row align="center" :wrap="false" class="user">
+              <a-row align="middle" :wrap="false" class="user">
                 <!-- 管理员头像 -->
                 <a-avatar :size="32">
                   <img :src="userStore.userInfo.avatar" />
@@ -159,5 +159,11 @@ const logout = () => {
       margin-left: 2px;
     }
   }
+}
+// :deep(.ant-layout-header){
+.ant-layout-header{
+  padding:0 10px;
+  // padding-inline: 0 !important;
+  background: #ffffff;
 }
 </style>

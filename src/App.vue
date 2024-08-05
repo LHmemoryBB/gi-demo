@@ -9,13 +9,18 @@
 
 <script setup lang="ts">
 defineOptions({ name: 'App' })
-
-const setThemeColor = {
+import { useAppStore } from '@/store'
+import {computed, reactive} from 'vue'
+const appStore = useAppStore()
+const setThemeColor = reactive({
   token: {
       colorPrimary: '#DB00FF',
       colorSuccess: '#52c41a'
     }
-}
+})
+setThemeColor.token.colorPrimary = computed(() => appStore.getThemeColor())
+console.log();
+
 </script>
 
 <style lang="scss" scoped>

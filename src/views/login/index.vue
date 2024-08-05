@@ -16,8 +16,8 @@
         >
           <h3 class="login-form-title"><img class="logo" src="@/assets/images/logo.gif" /><span>Admin Pro</span></h3>
           <a-form-item field="username" :rules="[{ required: true, message: '请输入账号' }]">
-            <a-input v-model="form.username" placeholder="账号 admin/user" size="medium" allow-clear>
-              <template #prefix><icon-user :stroke-width="1" :style="{ fontSize: '20px' }" /></template>
+            <a-input v-model:value="form.username" placeholder="账号 admin/user" size="medium" allow-clear>
+              <template #prefix><UserOutlined :size="20"/></template>
             </a-input>
           </a-form-item>
           <a-form-item
@@ -25,18 +25,18 @@
             :rules="[
               { required: true, message: '请输入密码' }            ]"
           >
-            <a-input-password v-model="form.password" placeholder="密码" size="medium" allow-clear>
-              <template #prefix><icon-lock :stroke-width="1" :style="{ fontSize: '20px' }" /></template>
+            <a-input-password v-model:value="form.password" placeholder="密码" size="medium" allow-clear>
+              <template #prefix><LockOutlined :size="20"/></template>
             </a-input-password>
           </a-form-item>
           <a-form-item>
-            <a-row justify="space-between" align="center" style="width: 100%">
+            <a-row justify="space-between" align="middle" style="width: 100%">
               <a-checkbox v-model="checked">记住密码</a-checkbox>
-              <a-link>忘记密码</a-link>
+              <a-button type="link">忘记密码</a-button>
             </a-row>
           </a-form-item>
           <a-form-item>
-            <a-space direction="vertical" fill style="width: 100%">
+            <a-space fill style="width: 100%">
               <a-button type="primary" size="large" long :loading="loading" @click="login">登录</a-button>
               <a-button type="text" size="large" long class="register-btn">注册账号</a-button>
             </a-space>
@@ -62,6 +62,7 @@
 import { useUserStore } from '@/store'
 import { useLoading } from '@/hooks'
 import { message, type FormInstance } from 'ant-design-vue'
+import {UserOutlined, LockOutlined} from '@ant-design/icons-vue'
 import LoginBg from './components/LoginBg/index.vue'
 import * as Regexp from '@/utils/regexp'
 import Verify from '@/components/verifition/Verify.vue'
@@ -86,8 +87,7 @@ const errorMessage = ref('')
 const FormRef = ref<FormInstance>()
 // 点击登录
 const login = async () => {
-  const flag = await FormRef.value?.validate()
-  if (flag) return
+  await FormRef.value?.validate()
   verify.value.show()
 }
 // 验证码验证成功调用登录接口

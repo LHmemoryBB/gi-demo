@@ -1,5 +1,5 @@
 <template>
-  <a-drawer v-model:visible="visible" title="项目配置" width="300px" unmount-on-close :footer="false">
+  <a-drawer v-model:open="visible" title="项目配置" width="300px" :footer="false">
     <a-space :size="15" direction="vertical" fill>
       <a-divider orientation="center">系统主题</a-divider>
       <a-row justify="center">
@@ -14,12 +14,12 @@
 
       <a-divider orientation="center">界面显示</a-divider>
 
-      <a-row justify="space-between" align="center">
+      <a-row justify="space-between" align="middle">
         <a-typography-text>页签显示</a-typography-text>
-        <a-switch size="medium" :model-value="appStore.tab" @change="appStore.setTabVisible(Boolean($event))" />
+        <a-switch size="small" :model-value="appStore.tab" @change="appStore.setTabVisible(Boolean($event))" />
       </a-row>
 
-      <a-row justify="space-between" align="center">
+      <a-row justify="space-between" align="middle">
         <a-typography-text>页签风格</a-typography-text>
         <a-select
           placeholder="请选择"
@@ -28,22 +28,22 @@
           :style="{ width: '120px' }"
           :trigger-props="{ autoFitPopupMinWidth: true }"
         >
-          <a-option
+          <a-select-option
             v-for="item in tabModeList"
             :key="item.value"
             :value="item.value"
             @click="appStore.setTabMode(item.value)"
-            >{{ item.label }}</a-option
+            >{{ item.label }}</a-select-option
           >
         </a-select>
       </a-row>
 
-      <a-row justify="space-between" align="center">
+      <a-row justify="space-between" align="middle">
         <a-typography-text>动画显示</a-typography-text>
-        <a-switch size="medium" :model-value="appStore.animate" @change="appStore.setAnimateVisible(Boolean($event))" />
+        <a-switch size="small" :model-value="appStore.animate" @change="appStore.setAnimateVisible(Boolean($event))" />
       </a-row>
 
-      <a-row justify="space-between" align="center">
+      <a-row justify="space-between" align="middle">
         <a-typography-text>动画切换类型</a-typography-text>
         <a-select
           placeholder="请选择"
@@ -51,12 +51,12 @@
           :disabled="!appStore.animate"
           :style="{ width: '120px' }"
         >
-          <a-option
+          <a-select-option
             v-for="item in animateModeList"
             :key="item.value"
             :value="item.value"
             @click="appStore.setAnimateMode(item.value)"
-            >{{ item.label }}</a-option
+            >{{ item.label }}</a-select-option
           >
         </a-select>
       </a-row>
@@ -65,6 +65,7 @@
 </template>
 
 <script setup lang="ts" name="SettingDrawer">
+import {defineExpose} from 'vue'
 import { useAppStore } from '@/store'
 import { ColorPicker } from 'vue-color-kit'
 import 'vue-color-kit/dist/vue-color-kit.css'
@@ -118,10 +119,30 @@ type ColorObj = {
 }
 
 // 改变主题色
-const changeColor = (colorObj: ColorObj) => {
-  if (!/^#[0-9A-Za-z]{6}/.test(colorObj.hex)) return
+const changeColor = debounce((colorObj: ColorObj) => {
+  if (!/^#[0-9A-Fa-f]{6}$/.test(colorObj.hex)) return
   appStore.setThemeColor(colorObj.hex)
+}, 1000)
+
+// 防抖函数
+function debounce(func: (...args: any[]) => void, wait: number) {
+  let timeoutId: ReturnType<typeof setTimeout>
+
+  return function (...args: any[]) {
+    const context = this
+
+    clearTimeout(timeoutId)
+
+    timeoutId = setTimeout(() => {
+      func.apply(context, args)
+    }, wait)
+  }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+:deep(.hu-color-picker){
+  width: auto !important;
+}
+
+</style>

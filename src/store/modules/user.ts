@@ -54,9 +54,14 @@ const storeSetup = () => {
     userInfo.value = data
   }
   const SetNavList = (obj : any)=> {
+    console.log(obj);
+    
     NavList.value = obj
   };
-  return {NavList, userInfo, userName, avatar, token, roles, permissions, login, logout, SetUserInfo, resetToken, SetNavList }
+  const getNavList = () =>{
+    return NavList.value
+  }
+  return {NavList, userInfo, userName, avatar, token, roles, permissions, login, logout, SetUserInfo, resetToken, SetNavList, getNavList }
 }
 
 export const useUserStore = defineStore('user', storeSetup, { persist: { paths: ['token'], storage: localStorage } })

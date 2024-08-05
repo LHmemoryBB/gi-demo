@@ -1,8 +1,8 @@
 <script setup>
 import { ref, reactive } from "vue";
-import Tform from "@/components/GiForm/index.vue";
-import TuploadImg from "@/components/GiUpload/ImageUploader.vue";
-import { useAxios } from '@/hooks'
+import Tform from "@/components/Templates/Tform.vue";
+import TuploadImg from "@/components/Templates/TuploadImg.vue";
+import { useAxios } from "@/hooks";
 import { up_image, getBannerDetail, setBannerUpdate } from "@/api/index";
 
 const _state = () => ({
@@ -121,8 +121,7 @@ const pathRemove = (file, fileList, keys) => {
 </script>
 
 <template>
-  <div>
-    <div class="content content_form">
+    <div class="page-container">
       <Tform
         ref="RefTform"
         :loading="loading"
@@ -133,11 +132,11 @@ const pathRemove = (file, fileList, keys) => {
         querytext="修改"
       >
         <template #all="scope">
-          <el-form-item
+          <a-form-item
             label="PC轮播图"
             :prop="'banner'"
             :rules="{ required: true, message: '请添加图片' }"
-            label-width="120px"
+            laba-width="120px"
           >
             <TuploadImg
               :up_img_api="up_image"
@@ -154,12 +153,12 @@ const pathRemove = (file, fileList, keys) => {
                 (file, fileList) => pathRemove(file, fileList, 'banner')
               "
             ></TuploadImg>
-          </el-form-item>
-          <el-form-item
+          </a-form-item>
+          <a-form-item
             label="移动轮播图"
             :prop="'ydBanner'"
             :rules="{ required: true, message: '请添加图片' }"
-            label-width="120px"
+            laba-width="120px"
           >
             <TuploadImg
               :up_img_api="up_image"
@@ -176,11 +175,10 @@ const pathRemove = (file, fileList, keys) => {
                 (file, fileList) => pathRemove(file, fileList, 'ydBanner')
               "
             ></TuploadImg>
-          </el-form-item>
+          </a-form-item>
         </template>
       </Tform>
     </div>
-  </div>
 </template>
 
 <style scoped>

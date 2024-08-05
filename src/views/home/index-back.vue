@@ -3,7 +3,8 @@
 	import * as echarts from 'echarts';
 	import { useAxios } from '@/hooks'
 	import { getHomeDetail } from '@/api/index'
-	
+	import { notification } from 'ant-design-vue';
+
 	const { loading, data:homeData, onSuccess, onError } = useAxios(getHomeDetail,{
 		data_deconstruction:(res)=> res.data,
 		immediate:true
@@ -15,9 +16,9 @@
 		setOption(getOption(date, data));
 	})
 	onError((res)=>{
-		ElNotification.error({
-			title: '提示',
-			message:  res.message || '请求失败！',
+		notification.error({
+			message: '提示',
+			description:  res.message || '请求失败！',
 			duration: 3000
 		})
 	})

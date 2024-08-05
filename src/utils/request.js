@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { getToken, setToken } from '@/utils/auth'
-
+import {message} from 'ant-design-vue'
 // 创建axios实例
 const service = axios.create({
 	baseURL: '',
@@ -32,12 +32,12 @@ service.interceptors.response.use(
 		// 获取响应数据
 		// 如果响应状态码不为200，则提示错误信息
 		if (response.status !== 200) {
-			ElMessage.error(response.data.message || '请求错误')
+			message.error(response.data.message || '请求错误')
 		} else {
 			if(response.data.code == 200){
 				return response.data
 			}else{
-				ElMessage.error(response.data.message || '请求错误')
+				message.error(response.data.message || '请求错误')
 				return Promise.reject(response)
 			}
 		}
@@ -51,9 +51,9 @@ service.interceptors.response.use(
 				break;
 			default:
 				if(error.message.includes('timeout')){
-					ElMessage.error('请求超时 !')
+					message.error('请求超时 !')
 				}else{
-					ElMessage.error('错误'+error.message)
+					message.error('错误'+error.message)
 				}
 		}
 		// 返回错误信息

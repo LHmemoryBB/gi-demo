@@ -1,8 +1,16 @@
 <script lang="ts" setup>
 import { reactive, ref, defineExpose, defineEmits } from 'vue'
-import GiSelect from '@/components/GiSelect/index.vue'
-import GiRadio from '@/components/GiRadio/index.vue'
+import Tselect from '@/components/Templates/Tselect.vue'
+import Tradio from '@/components/Templates/Tradio.vue'
 
+const labelCol = {
+  xs: { span: 10 },
+  sm: { span: 3 }
+}
+const wrapperCol = {
+  xs: { span: 20 },
+  sm: { span: 10 }
+}
 const props = defineProps({
   ruleForm: {
     type: Object,
@@ -43,26 +51,23 @@ const formRef = ref()
 //keys 不同的查询条件
 const submitForm = async (keys) => {
   if (!formRef) return
-  await formRef.value?.validate((valid, fields) => {
-    if (valid) {
-      emit('submit', 'form', keys)
-    }
-  })
+  await formRef.value?.validate()
+  emit('submit', 'form', keys)
 }
 //清空
 const resetForm = () => {
-	console.log(formRef.value);
-	
+  console.log(formRef.value)
+
   if (!formRef.value) return
   formRef.value?.resetFields()
-//   props.listInput.map((item) => {
-//     if (item.hasOwnProperty('_prop')) {
-//       item._prop.forEach((keys) => {
-//         props.ruleForm[keys] = ''
-//       })
-//     }
-//   })
-//   emit('resetForm', 'resetForm')
+  //   props.listInput.map((item) => {
+  //     if (item.hasOwnProperty('_prop')) {
+  //       item._prop.forEach((keys) => {
+  //         props.ruleForm[keys] = ''
+  //       })
+  //     }
+  //   })
+  //   emit('resetForm', 'resetForm')
 }
 //date-picker处理
 const SetDatePacker = (e, key: Array) => {
@@ -91,14 +96,14 @@ defineExpose({
 </script>
 
 <template>
-  <a-form ref="formRef" :model="ruleForm" :inline="inline" :label-width="label_width" class="demo-ruleForm">
+  <a-form ref="formRef" :model="ruleForm" :inline="inline" :wrapper-col="wrapperCol" :label-col="labelCol" class="demo-ruleForm">
     <template v-for="item in listInput">
       <template v-if="item.type !== 'custom'">
-        <a-form-item v-if="!item.isHide" :label="item.label" :prop="item.prop" :rules="item.rules || null">
+        <a-form-item v-if="!item.isHide" :label="item.label" :name="item.prop" :rules="item.rules || null">
           <a-input
             v-if="item.type == 'input'"
             :disabled="item.disabled"
-            v-model="ruleForm[item.prop]"
+            v-model:value="ruleForm[item.prop]"
             :placeholder="item.placeholder || '请输入' + item.label"
             allow-clear
           />
@@ -110,13 +115,13 @@ defineExpose({
             show-word-limit
             autosize
             :disabled="item.disabled"
-            v-model="ruleForm[item.prop]"
+            v-model:value="ruleForm[item.prop]"
             :placeholder="item.placeholder || '请输入' + item.label"
             allow-clear
           />
           <a-date-picker
             v-else-if="item.type == 'time'"
-            v-model="ruleForm[item.prop]"
+            v-model:value="ruleForm[item.prop]"
             :type="item._type"
             :start-placeholder="item.placeholder[0]"
             :end-placeholder="item.placeholder[1]"
@@ -126,13 +131,13 @@ defineExpose({
             :disabled-date="(time) => disabledDate(time, item.disabledDate ?? '')"
             range-separator="至"
           />
-          <GiSelect
+          <Tselect
             v-else-if="item.type == 'select'"
             :ruleForm="ruleForm"
             :listInput="item"
             @selectChange="selectChange"
           />
-          <GiRadio
+          <Tradio
             v-else-if="item.type == 'radio'"
             :ruleForm="ruleForm"
             :listInput="item"
@@ -149,7 +154,7 @@ defineExpose({
       </template>
     </template>
     <slot></slot>
-    <a-form-item v-if="!btn_hide">
+    <a-form-item v-if="!btn_hide" label="">
       <a-space>
         <a-button :loading="loading" type="primary" @click="submitForm()">{{ querytext }}</a-button>
         <a-button @click="resetForm()" v-if="!hidden_refresh">清空</a-button>
@@ -174,5 +179,9 @@ defineExpose({
 .fixed_width .a-input,
 .dialog .a-select .a-input {
   width: 200px !important;
+}
+.demo-ruleForm .ant-space{
+  justify-content: center;
+  width: 100%;
 }
 </style>

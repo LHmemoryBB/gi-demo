@@ -24,17 +24,17 @@
           <template #overlay>
             <a-menu>
               <a-menu-item @click="tabsStore.closeCurrent(route.path)">
-                <template #icon><icon-close /></template>
+                <template #icon><CloseOutlined /></template>
                 <template #default>关闭当前</template>
               </a-menu-item>
               <a-menu-item @click="tabsStore.closeOther(route.path)">
-                <template #icon><icon-eraser /></template>
+                <template #icon><CloseSquareOutlined /></template>
                 <template #default>关闭其他</template>
               </a-menu-item>
-              <a-menu-item @click="tabsStore.closeAll">
+              <!-- <a-menu-item @click="tabsStore.closeAll">
                 <template #icon><icon-minus /></template>
                 <template #default>关闭全部</template>
-              </a-menu-item>
+              </a-menu-item> -->
             </a-menu>
           </template>
         </a-dropdown>
@@ -47,7 +47,7 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { useTabsStore, useAppStore } from '@/store'
 import MagicIcon from './MagicIcon.vue'
-import { AppleOutlined, MacCommandOutlined } from '@ant-design/icons-vue';
+import { AppleOutlined, MacCommandOutlined, CloseOutlined, CloseSquareOutlined } from '@ant-design/icons-vue';
 
 const route = useRoute()
 const router = useRouter()

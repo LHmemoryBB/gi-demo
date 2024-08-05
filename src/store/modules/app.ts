@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { reactive, computed, toRefs } from 'vue'
-// import { generate, getRgbStr } from '@arco-design/color'
 import defaultSettings from '@/config/setting.json'
 import type { TabModeType, animateModeType } from '@/config/option'
 
@@ -34,15 +33,15 @@ const storeSetup = () => {
 
   // 设置主题色
   const setThemeColor = (color: string) => {
-    // if (!color) return
-    // settingConfig.themeColor = color
-    // const list = generate(settingConfig.themeColor, { list: true, dark: settingConfig.theme === 'dark' })
-    // list.forEach((color: string, index: number) => {
-    //   const rgbStr = getRgbStr(color)
-    //   document.body.style.setProperty(`--primary-${index + 1}`, rgbStr)
-    // })
+    console.log(color, '主题色');
+    
+    if (!color) return
+    settingConfig.themeColor = color
   }
-
+  const getThemeColor = () => {
+    return settingConfig.themeColor
+  }
+  
   // 设置页签可见
   const setTabVisible = (visible: boolean) => {
     settingConfig.tab = visible
@@ -71,7 +70,8 @@ const storeSetup = () => {
     setTabVisible,
     setTabMode,
     setAnimateVisible,
-    setAnimateMode
+    setAnimateMode,
+    getThemeColor
   }
 }
 

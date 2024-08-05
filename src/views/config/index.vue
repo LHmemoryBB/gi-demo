@@ -1,9 +1,11 @@
 <script setup>
 import { ref, reactive, toRaw, defineAsyncComponent } from "vue";
-import Tform from "@/components/GiForm/index.vue";
-import TuploadImg from "@/components/GiUpload/ImageUploader.vue";
+import Tform from "@/components/Templates/Tform.vue";
+import TuploadImg from "@/components/Templates/TuploadImg.vue";
 import TuploadPdf from "@/components/GiUpload/fileUpload.vue";
 import { useAxios } from '@/hooks'
+import { notification } from 'ant-design-vue';
+
 import {
   up_singleImg,
   up_singlePdf,
@@ -96,6 +98,7 @@ const {
 });
 
 //初始
+let showDetail = ref(false)
 const on_init = () => {
   sendDetail();
   onSuccessDetail((res) => {
@@ -148,11 +151,12 @@ const on_init = () => {
         },
       ];
     }
+    showDetail.value = true
   });
   onErrorDetail((res) => {
-    ElNotification.error({
-      title: "提示",
-      message: res.message || "数据异常！",
+    notification.error({
+      message: "提示",
+      description: res.message || "数据异常！",
       duration: 3000,
     });
   });
@@ -169,24 +173,22 @@ const { loading, data, onSuccess, onError, send } = useAxios(setConfigUpdate, {
   immediate: false,
 });
 onSuccess((res) => {
-  ElNotification.success({
-    title: "提示",
-    message: res.message || "修改成功!",
+  notification.success({
+    message: "提示",
+    description: res.message || "修改成功!",
     duration: 3000,
   });
 });
 onError((res) => {
-  ElNotification.error({
-    title: "提示",
-    message: res.message || "修改失败！",
+  notification.error({
+    message: "提示",
+    description: res.message || "修改失败！",
     duration: 3000,
   });
 });
 
 //提交
-const submit = (type) => {
-  console.log(123123213);
-  
+const submit = (type) => {  
   let data = {
     ...ruleForm,
     logo: ruleForm.logo[0].response.data ?? ruleForm.logo[0].response[0],
@@ -212,15 +214,16 @@ const pathSuccess = (response, file, fileList, keys) => {
 };
 
 //删除
-const pathRemove = (file, fileList, keys) => {
-  ruleForm[keys] = fileList;
+const pathRemove = (file,keys) => {
+  ruleForm[keys] = ruleForm[keys].filter(item => item.uid !== file.uid)
 };
 </script>
 
 <template>
   <div>
-    <div class="table-page">
+    <div class="page-container">
       <Tform
+        v-if="showDetail"
         ref="RefTform"
         :loading="loading"
         :ruleForm="ruleForm"
@@ -232,10 +235,11 @@ const pathRemove = (file, fileList, keys) => {
         <template #logo="scope">
           <a-form-item
             label="用户头像"
-            :prop="'logo'"
+            :name="'logo'"
             :rules="{ required: true, message: '请添加图片' }"
             label-width="120px"
           >
+          
             <TuploadImg
               :up_img_api="up_singleImg"
               :fileList="ruleForm.logo"
@@ -248,7 +252,7 @@ const pathRemove = (file, fileList, keys) => {
                   pathSuccess(response, file, fileList, 'logo')
               "
               @pathRemove="
-                (file, fileList) => pathRemove(file, fileList, 'logo')
+                (file) => pathRemove(file, 'logo')
               "
             ></TuploadImg>
           </a-form-item>
@@ -256,7 +260,7 @@ const pathRemove = (file, fileList, keys) => {
         <template #officialAccount="scope">
           <a-form-item
             label="公众号"
-            :prop="'officialAccount'"
+            :name="'officialAccount'"
             :rules="{ required: true, message: '请添加图片' }"
             label-width="120px"
           >
@@ -272,8 +276,8 @@ const pathRemove = (file, fileList, keys) => {
                   pathSuccess(response, file, fileList, 'officialAccount')
               "
               @pathRemove="
-                (file, fileList) =>
-                  pathRemove(file, fileList, 'officialAccount')
+                (file) =>
+                  pathRemove(file, 'officialAccount')
               "
             ></TuploadImg>
           </a-form-item>
@@ -281,7 +285,7 @@ const pathRemove = (file, fileList, keys) => {
         <template #businessAccount="scope">
           <a-form-item
             label="商户号"
-            :prop="'businessAccount'"
+            :name="'businessAccount'"
             :rules="{ required: true, message: '请添加图片' }"
             label-width="120px"
           >
@@ -297,8 +301,8 @@ const pathRemove = (file, fileList, keys) => {
                   pathSuccess(response, file, fileList, 'businessAccount')
               "
               @pathRemove="
-                (file, fileList) =>
-                  pathRemove(file, fileList, 'businessAccount')
+                (file) =>
+                  pathRemove(file, 'businessAccount')
               "
             ></TuploadImg>
           </a-form-item>
@@ -306,7 +310,7 @@ const pathRemove = (file, fileList, keys) => {
         <template #apiPdf="scope">
           <a-form-item
             label="API文档"
-            :prop="'apiPdf'"
+            :name="'apiPdf'"
             :rules="{ required: true, message: '请上传pdf文件' }"
             label-width="120px"
           >
@@ -318,7 +322,7 @@ const pathRemove = (file, fileList, keys) => {
                   pathSuccess(response, file, fileList, 'apiPdf')
               "
               @pathRemove="
-                (file, fileList) => pathRemove(file, fileList, 'apiPdf')
+                (file) => pathRemove(file, 'apiPdf')
               "
             ></TuploadPdf>
           </a-form-item>

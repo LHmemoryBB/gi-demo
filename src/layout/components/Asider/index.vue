@@ -14,7 +14,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="Asider">
+<script setup lang="ts">
 import { usePermissionStore } from '@/store'
 import SidebarItem from './SidebarItem.vue'
 import { useUserStore } from '@/store'
@@ -24,7 +24,9 @@ const route = useRoute()
 const userStore = useUserStore()
 const router = useRouter()
 const permissionStore = usePermissionStore()
-const sidebarRoutes = computed(() => userStore.NavList)
+const sidebarRoutes = computed(() => userStore.getNavList())
+
+
 const collapse = ref(false)
 const handleCollapse = (isCollapse: boolean) => {
   collapse.value = isCollapse

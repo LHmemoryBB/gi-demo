@@ -56,10 +56,10 @@
 		:multiple="listInput.multiple"
 		allow-clear
 		:disabled='listInput.disabled || props.disabled'>
-	    <a-option
+	    <a-select-option
 	      v-for="item in options"
 	      :key="item[listInput._value || 'id']"
 	      :value="item[listInput._value || 'id']"
-	    >{{item[listInput._label || 'value']}}</a-option>
+	    >{{item[listInput._label || 'value']}}</a-select-option>
 	</a-select>
 </template>
