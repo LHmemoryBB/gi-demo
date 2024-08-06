@@ -43,6 +43,7 @@ declare module 'vue' {
     Tradio: typeof import('./components/Templates/Tradio.vue')['default']
     TreeSwitcherIcon: typeof import('./components/CateTree/TreeSwitcherIcon.vue')['default']
     Tselect: typeof import('./components/Templates/Tselect.vue')['default']
+    Ttable: typeof import('./components/Templates/Ttable.vue')['default']
     TuploadImg: typeof import('./components/Templates/TuploadImg.vue')['default']
     UplaodImg: typeof import('./components/GiUpload/uplaodImg.vue')['default']
     Verify: typeof import('./components/verifition/Verify.vue')['default']

@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits, defineProps, computed } from 'vue'
+import { ref, reactive, defineEmits, defineProps, computed } from 'vue'
 import { message } from 'ant-design-vue'
 import { getToken } from '@/utils/auth' // 请根据实际路径调整
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue';
@@ -55,12 +55,13 @@ const props = defineProps({
     default: () => ''
   }
 })
-console.log(props);
-
 const hideUpload = ref(false)
 const headers = ref({})
-const fileList = ref([])
-fileList.value = computed(() => props.fileList)
+let fileList = reactive([])
+fileList = computed(() => {
+  const list = Array.isArray(props.fileList) ? props.fileList : []
+  return list
+})
 
 const getFileList = () => {
   const list = Array.isArray(props.fileList) ? props.fileList : []
@@ -68,8 +69,6 @@ const getFileList = () => {
 }
 
 const beforeUpload = (file: File) => {
-  console.log('beforeUpload')
-
   setHeaders()
   const isValidType = ['image/jpg', 'image/jpeg', 'image/png'].includes(file.type)
   const isValidSize = file.size / 1024 / 1024 <= props.size
@@ -92,9 +91,7 @@ const handleChange = (info: UploadChangeParam) => {
   if (info.file.status !== 'uploading') {
     console.log(info.file, info.fileList);
   }
-  if (info.file.status === 'done') {
-    console.log(info, '文件上传');
-    
+  if (info.file.status === 'done') {    
     // emit('pathSuccess', response, file, fileList)
     message.success(`${info.file.name} file uploaded successfully`);
   } else if (info.file.status === 'error') {
@@ -103,7 +100,6 @@ const handleChange = (info: UploadChangeParam) => {
 };
 
 const handleRemove = (file: any, fileList: any[]) => {
-  console.log(file, fileList, '删除')
   emit('pathRemove', file, fileList)
 }
 
