@@ -23,5 +23,6 @@ defineOptions({ name: 'Layout' })
   height: 100%;
   flex-direction: row;
   background: #FFFFFF;
+  -webkit-font-smoothing: auto !important;
 }
 </style>

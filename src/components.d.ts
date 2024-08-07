@@ -9,7 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     Breadcrumb: typeof import('./components/Breadcrumb/index.vue')['default']
     CateTree: typeof import('./components/CateTree/index.vue')['default']
-    copy: typeof import('./components/GiUpload/fileUploader copy.vue')['default']
+    copy: typeof import('./components/Templates/Ttable copy.vue')['default']
     FileUpload: typeof import('./components/GiUpload/fileUpload.vue')['default']
     FileUploader: typeof import('./components/GiUpload/fileUploader.vue')['default']
     GiChart: typeof import('./components/GiChart/index.vue')['default']
@@ -38,6 +38,7 @@ declare module 'vue' {
     RightMenu: typeof import('./components/CateTree/RightMenu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Tdialog: typeof import('./components/Templates/Tdialog.vue')['default']
     Templates: typeof import('./components/Templates/index.vue')['default']
     Tform: typeof import('./components/Templates/Tform.vue')['default']
     Tradio: typeof import('./components/Templates/Tradio.vue')['default']

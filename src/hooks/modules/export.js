@@ -1,6 +1,9 @@
 import axios from 'axios'
+import { createVNode } from 'vue';
 import { getToken } from '@/utils/auth'
-
+import { notification } from 'ant-design-vue'
+import { Modal, message } from 'ant-design-vue';
+import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 // 创建axios实例
 const service = axios.create({
 	baseURL: '',
@@ -39,8 +42,8 @@ export const onExport = (url, data) => {
 				const parsedObject = JSON.parse(textContent);
 				//解析成功，该变量是一个对象
 				console.log(parsedObject)
-				if(parsedObject.code !== 2001){
-					ElMessage.error(parsedObject.message || '导出错误')
+				if (parsedObject.code !== 2001) {
+					message.error(parsedObject.message || '导出错误')
 				}
 				reject()
 			} catch (error) {
@@ -66,16 +69,16 @@ export const onExport = (url, data) => {
 				a.download = decodedFilename || '导出文件的名称.xlsx';
 				a.click();
 				window.URL.revokeObjectURL(url);
-				ElNotification.success({
+				notification.success({
 					title: '提示',
 					message: '导出成功!',
 					duration: 3000
 				})
 				resolve()
 			}
-			
+
 		}).catch(err => {
-			ElNotification.error({
+			notification.error({
 				title: '提示',
 				message: '导出失败！',
 				duration: 3000
@@ -86,33 +89,32 @@ export const onExport = (url, data) => {
 }
 
 export const openExport = (api, form) => {
-	ElMessageBox.confirm(
-			'导出全部？', {
-				title: '提示',
-				confirmButtonText: '确认',
-				cancelButtonText: '取消',
-				beforeClose: (action, instance, done) => {
-					if (action === 'confirm') {
-						instance.confirmButtonLoading = true
-						instance.confirmButtonText = 'Loading...'
-						onExport(api(), form).then(res => {
-							done()
-							setTimeout(() => {
-								instance.confirmButtonLoading = false
-							}, 300)
-						}).catch(error => {
-							setTimeout(() => {
-								instance.confirmButtonLoading = false
-								instance.confirmButtonText = '重试'
-							}, 300)
-						})
-					} else {
-						done()
-					}
-				}
-			}
-		)
-		.catch(() => {
-	
-		})
+	let loading = false
+	const modal = Modal.confirm({
+		title: '提示',
+		icon: createVNode(ExclamationCircleOutlined),
+		content: '导出全部？',
+		okText: '确认',
+		okType: 'primary',
+		cancelText: '取消',
+		async onOk(e) {
+			setTimeout(() => {
+				modal.destroy();
+			}, 2000)
+			loading = true
+			onExport(api(), form).then(res => {
+				setTimeout(() => {
+					modal.destroy();
+				}, 2000)
+			}).catch(error => {
+				loading = false
+				modal.update({
+					okText: '重试',
+				});
+			})
+		},
+		onCancel() {
+		},
+	});
+
 }

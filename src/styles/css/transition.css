@@ -115,31 +115,3 @@
     opacity: 0;
   }
 }
-
-.el-dialog-enter-active {
-  animation: dialog-fade-in 0.3s;
-}
-.el-dialog-leave-active {
-  animation: dialog-fade-out 0.3s;
-}
-
-.el-mask-enter-active {
-  animation: modal-fade-in 0.3s;
-}
-.el-mask-leave-active {
-  animation: modal-fade-out 0.3s;
-}
-
-/* el-fade-bottom */
-.el-fade-enter-active,
-.el-fade-leave-active {
-  transition: all 0.3s;
-}
-.el-fade-enter-from {
-  opacity: 0;
-  transform: scale(1.1, 0.2);
-}
-.el-fade-leave-to {
-  opacity: 0;
-  transform: scale(1.1, 0.2);
-}

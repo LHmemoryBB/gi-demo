@@ -1,5 +1,6 @@
 import { useAxios } from '@/hooks'
-
+import { notification } from 'ant-design-vue';
+import { SmileOutlined, MehOutlined } from '@ant-design/icons-vue'
 export default function switch_beforeChange(api, form, row, key) {
 	row[key] = true
 	return new Promise((resolve, reject) => {
@@ -11,18 +12,20 @@ export default function switch_beforeChange(api, form, row, key) {
 		});
 		onSuccess((res) => {
 			row[key] = false
-			ElNotification({
-				type: 'success',
-				message: res.message || '操作成功！',
-			})
+			notification.success({
+				message: '提示',
+				description: res.message,
+				duration: 3000
+			});
 			return resolve(true)
 		})
 		onError((err) => {
 			row[key] = false
-			ElNotification({
-				type: 'error',
-				message: err.message || '操作失败！',
-			})
+			notification.success({
+				message: '提示',
+				description: err.message || '修改失败',
+				duration: 3000
+			});
 			return reject(new Error('Error'))
 		})
 	})

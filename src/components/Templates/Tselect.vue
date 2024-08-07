@@ -47,7 +47,7 @@
  -->
 <template>
 	<a-select
-		v-model="ruleForm[listInput.prop]"
+		v-model:value="ruleForm[listInput.prop]"
 		:placeholder="listInput.placeholder || '请选择' + listInput.label" 
 		:loading='listInput.options?false:loading'
 		@change="selectChange"

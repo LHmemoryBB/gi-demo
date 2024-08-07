@@ -4,6 +4,7 @@ import Tform from '@/components/Templates/Tform.vue'
 import TuploadImg from '@/components/Templates/TuploadImg.vue'
 import { useAxios } from '@/hooks'
 import { up_image, getBannerDetail, setBannerUpdate } from '@/api/index'
+import { notification } from 'ant-design-vue'
 
 const _state = () => ({
   id: '',
@@ -51,7 +52,7 @@ const on_init = () => {
     })
   })
   onErrorDetail((res) => {
-    ElNotification.error({
+    notification.error({
       title: '提示',
       message: res.message || '数据异常！',
       duration: 3000
@@ -70,14 +71,14 @@ const { loading, data, onSuccess, onError, send } = useAxios(setBannerUpdate, {
   immediate: false
 })
 onSuccess((res) => {
-  ElNotification.success({
+  notification.success({
     title: '提示',
     message: res.message || '配置成功!',
     duration: 3000
   })
 })
 onError((res) => {
-  ElNotification.error({
+  notification.error({
     title: '提示',
     message: res.message || '配置失败！',
     duration: 3000

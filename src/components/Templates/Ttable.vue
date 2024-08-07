@@ -17,14 +17,18 @@ const props = defineProps({
     default: () => []
   },
   pages: {
-    type: Object,
-    default: () => {}
+    type: [Object, Boolean],
+    default: false
   },
   pagination: {
     type: [Object, Boolean],
     default: () => {}
   },
 
+  tableHeight: {
+    type: Number,
+    default: null
+  },
   loading: {
     type: Boolean,
     default: false
@@ -51,16 +55,20 @@ const leftheaderStyle = ({ row, column, rowIndex, columnIndex }: { row: User; ro
 }
 
 const pagination = computed(() => {
-  return {
-    showSizeChanger: true,
-    showQuickJumper: false,
-    showTotal: () => `共${props.pages.total}条`,
-    pageSize: props.pages.pageSize,
-    current: props.pages.page,
-    total: props.pages.total,
-    pageSizeOptions: ['10', '20', '50', '100'],
-    onShowSizeChange: (current, pageSize) => changePageSize(current, pageSize),
-    onChange: (page, pageSize) => changePage(page, pageSize)
+  if (props.pages) {
+    return {
+      showSizeChanger: true,
+      showQuickJumper: false,
+      showTotal: () => `共${props.pages.total}条`,
+      pageSize: props.pages.pageSize,
+      current: props.pages.page,
+      total: props.pages.total,
+      pageSizeOptions: ['10', '20', '50', '100'],
+      onShowSizeChange: (current, pageSize) => changePageSize(current, pageSize),
+      onChange: (page, pageSize) => changePage(page, pageSize)
+    }
+  } else {
+    return false
   }
 })
 
@@ -88,21 +96,22 @@ const getSelectionRows = () => {
 const clearSelection = () => {
   TableRef!.clearSelection()
 }
-// 获得当前双击的单元格的横竖index，然后拼接成一个唯一字符串用于判断，并赋给currentCell
-// 拼接后类似这样："1,0","1,1",
-const dbclick = (row, column, event) => {
-  currentCell.value = row.index + ',' + column.index
-  // input 自动获取焦点
-  nextTick(() => {
-    const listItems = document.querySelectorAll(`input[data-value="${currentCell.value}"]`)
-    listItems[0]?.focus()
+// 行编辑,
+const editableData: any = ref({})
+const editInputRef = ref()
+const dblclick = (index, row) => {
+  editableData.value = JSON.parse(JSON.stringify(row))
+  editableData.value.tableInputIndex = index
+  nextTick(() =>{
+    editInputRef.value.focus()
   })
 }
+
 // 关闭编辑状态
-const hideInput = (row) => {
-  currentCell.value = null
-  emit('change_edit', row)
-}
+	const hideInput = (row) => {
+		editableData.value = {}
+		emit('change_edit', row)
+	}
 
 let lodRow = null
 //点击行切换选中状态
@@ -132,7 +141,7 @@ const { height: wrapperElHeight } = useElementSize(TableContainerRef)
 
 const scrollConfig = computed(() => {
   return {
-    y: wrapperElHeight.value - 102,
+    y: props.tableHeight ? props.tableHeight : wrapperElHeight.value - 102,
     x: toValue(702)
   }
 })
@@ -159,16 +168,26 @@ defineExpose({
       @row-click="rowSelection"
       @selection-change="onSelectChange"
       @select="onSelect"
-      @row-dblclick="dbclick"
       size="small"
       :scroll="scrollConfig"
     >
       <!-- <template v-slot:headerCell="{ column }">
         <span class="title2" :style="{ whiteSpace: 'nowrap', fontWeight: 'normal' }">{{ column.title }}</span>
       </template> -->
-      <template v-slot:bodyCell="{ column, record }">
+      <template v-slot:bodyCell="{ column, text, record, index }">
         <template v-if="column.type === 'slot'">
           <slot :name="column.dataIndex" :column="column" :record="record"></slot>
+        </template>
+        <template v-else-if="column.type === 'edit'">
+          <!-- {{column}}-{{text}}-{{record}}-{{index}} -->
+          <div class="editable-cell">
+            <div v-if="editableData.tableInputIndex === index" class="editable-cell-input-wrapper">
+              <a-input v-model:value="record[column.dataIndex]" ref="editInputRef" @blur="hideInput(record)"/>
+            </div>
+            <div v-else class="editable-cell-text-wrapper" @dblclick="dblclick(index, record)">
+              {{ record[column.dataIndex] || ' ' }}
+            </div>
+          </div>
         </template>
         <template v-else>
           {{ record[column.dataIndex] }}
@@ -199,5 +218,8 @@ defineExpose({
   .ant-table {
     max-height: 100%;
   }
+}
+.editable-cell-text-wrapper {
+  cursor: pointer;
 }
 </style>

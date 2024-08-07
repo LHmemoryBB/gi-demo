@@ -32,9 +32,7 @@ const storeSetup = () => {
   }
 
   // 设置主题色
-  const setThemeColor = (color: string) => {
-    console.log(color, '主题色');
-    
+  const setThemeColor = (color: string) => {    
     if (!color) return
     settingConfig.themeColor = color
   }

@@ -5,7 +5,7 @@ import { getUserInfo as loginApi, logout as logoutApi } from '@/api/index'
 import { setToken, removeToken, getToken } from '@/utils/auth'
 
 const storeSetup = () => {
-  const userInfo = ref({
+  const userInfo: any = ref({
     name: '',
     avatar: ''
   })
@@ -53,9 +53,7 @@ const storeSetup = () => {
   const SetUserInfo = (data: Object) =>{
     userInfo.value = data
   }
-  const SetNavList = (obj : any)=> {
-    console.log(obj);
-    
+  const SetNavList = (obj : any)=> {    
     NavList.value = obj
   };
   const getNavList = () =>{

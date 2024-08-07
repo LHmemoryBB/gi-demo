@@ -4,9 +4,7 @@ import Tselect from '@/components/Templates/Tselect.vue'
 import Tradio from '@/components/Templates/Tradio.vue'
 import dayjs, { Dayjs } from 'dayjs';
 
-const labelCol = {
-  style: { width: '100px' }
-}
+
 // const wrapperCol = {
 //   xs: { span: 24 },
 //   sm: { span: 12 }
@@ -30,7 +28,7 @@ const props = defineProps({
   },
   label_width: {
     type: String,
-    default: '80px'
+    default: '100px'
   },
   loading: {
     type: Boolean,
@@ -48,6 +46,9 @@ const props = defineProps({
     type: String,
     default: 'horizontal'
   }
+})
+const labelCol = computed(() =>{
+  return {style: { width: props.label_width }}
 })
 //form提交
 const emit = defineEmits(['submit', 'resetForm'])
@@ -124,13 +125,11 @@ defineExpose({
             :placeholder="item.placeholder || '请输入' + item.label"
             allow-clear
           />
-          <a-input
+          <a-textarea
             v-if="item.type == 'textarea'"
             :style="item.width"
-            :type="item.type"
-            :maxlength="item.length > 0 ? item.length : 50"
             show-word-limit
-            autosize
+            auto-size
             :disabled="item.disabled"
             v-model:value="ruleForm[item.prop]"
             :placeholder="item.placeholder || '请输入' + item.label"
@@ -178,7 +177,7 @@ defineExpose({
       <!-- <a-space> -->
       <div class="btn_class">
         <a-button :loading="loading" type="primary" @click="submitForm()">{{ querytext }}</a-button>
-        <a-button @click="resetForm()" v-if="!hidden_refresh">清空</a-button>
+        <a-button @click="resetForm()" v-if="!hidden_refresh" class="_btn">清空</a-button>
         <slot name="operation"></slot>
       </div>
       <!-- </a-space> -->
@@ -198,11 +197,18 @@ defineExpose({
   .ant-picker {
     width: 200px;
   }
+  .ant-select {
+    width: 200px !important;
+  }
   .ant-input-affix-wrapper {
     width: 200px;
   }
+
   .a-form--inline .a-form-item {
     margin-right: 20px;
+  }
+  ._btn{
+    margin: 0 10px;
   }
 }
 </style>
