@@ -222,7 +222,8 @@ const pathRemove = (file,keys) => {
 <template>
   <div>
     <div class="page-container">
-      <Tform
+      <div class="table-container">
+        <Tform
         v-if="showDetail"
         ref="RefTform"
         :loading="loading"
@@ -328,6 +329,7 @@ const pathRemove = (file,keys) => {
           </a-form-item>
         </template>
       </Tform>
+      </div>
     </div>
   </div>
 </template>

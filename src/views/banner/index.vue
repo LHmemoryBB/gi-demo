@@ -1,104 +1,104 @@
 <script setup>
-import { ref, reactive } from "vue";
-import Tform from "@/components/Templates/Tform.vue";
-import TuploadImg from "@/components/Templates/TuploadImg.vue";
-import { useAxios } from "@/hooks";
-import { up_image, getBannerDetail, setBannerUpdate } from "@/api/index";
+import { ref, reactive } from 'vue'
+import Tform from '@/components/Templates/Tform.vue'
+import TuploadImg from '@/components/Templates/TuploadImg.vue'
+import { useAxios } from '@/hooks'
+import { up_image, getBannerDetail, setBannerUpdate } from '@/api/index'
 
 const _state = () => ({
-  id: "",
+  id: '',
   banner: [],
-  ydBanner: [],
-});
-const ruleForm = reactive(_state());
+  ydBanner: []
+})
+const ruleForm = reactive(_state())
 const listInput = [
   {
-    type: "custom",
-    prop: "all",
-  },
-];
+    type: 'custom',
+    prop: 'all'
+  }
+]
 const {
   loading: loadingDetail,
   onSuccess: onSuccessDetail,
   onError: onErrorDetail,
-  send: sendDetail,
+  send: sendDetail
 } = useAxios(getBannerDetail, {
-  immediate: false,
-});
+  immediate: false
+})
 
 //初始
 const on_init = () => {
-  sendDetail();
+  sendDetail()
   onSuccessDetail((res) => {
     for (let keys in ruleForm) {
-      ruleForm[keys] = res.data[keys] ?? "";
+      ruleForm[keys] = res.data[keys] ?? ''
     }
     ruleForm.banner = ruleForm.banner.map((item) => {
       return {
         name: item,
         uid: item,
         url: item,
-        response: [item],
-      };
-    });
+        response: [item]
+      }
+    })
     ruleForm.ydBanner = ruleForm.ydBanner.map((item) => {
       return {
         name: item,
         uid: item,
         url: item,
-        response: [item],
-      };
-    });
-  });
+        response: [item]
+      }
+    })
+  })
   onErrorDetail((res) => {
     ElNotification.error({
-      title: "提示",
-      message: res.message || "数据异常！",
-      duration: 3000,
-    });
-  });
-};
-on_init();
+      title: '提示',
+      message: res.message || '数据异常！',
+      duration: 3000
+    })
+  })
+}
+on_init()
 
 //关闭
-const RefTform = ref(null);
+const RefTform = ref(null)
 const close = () => {
-  RefTform.value?.resetForm();
-};
+  RefTform.value?.resetForm()
+}
 
 const { loading, data, onSuccess, onError, send } = useAxios(setBannerUpdate, {
-  immediate: false,
-});
+  immediate: false
+})
 onSuccess((res) => {
   ElNotification.success({
-    title: "提示",
-    message: res.message || "配置成功!",
-    duration: 3000,
-  });
-});
+    title: '提示',
+    message: res.message || '配置成功!',
+    duration: 3000
+  })
+})
 onError((res) => {
   ElNotification.error({
-    title: "提示",
-    message: res.message || "配置失败！",
-    duration: 3000,
-  });
-});
+    title: '提示',
+    message: res.message || '配置失败！',
+    duration: 3000
+  })
+})
 
 //提交
 const submit = (type) => {
   let data = {
     ...ruleForm,
     banner: ruleForm.banner.map((item) => item.response[0]),
-    ydBanner: ruleForm.ydBanner.map((item) => item.response[0]),
-  };
+    ydBanner: ruleForm.ydBanner.map((item) => item.response[0])
+  }
 
-  send(data);
-};
+  send(data)
+}
 
 //确认
 const confirm = () => {
-  RefTform.value?.submitForm();
-};
+  RefTform.value?.submitForm()
+}
 
 // //图片上传
 // const pathSuccess = (response, file, fileList)=>{
@@ -111,17 +111,18 @@ const confirm = () => {
 
 //图片上传
 const pathSuccess = (response, file, fileList, keys) => {
-  ruleForm[keys] = fileList;
-};
+  ruleForm[keys] = fileList
+}
 
 //图片删除
 const pathRemove = (file, fileList, keys) => {
-  ruleForm[keys] = fileList;
-};
+  ruleForm[keys] = fileList
+}
 </script>
 
 <template>
-    <div class="page-container">
+  <div class="page-container">
+    <div class="form-container">
       <Tform
         ref="RefTform"
         :loading="loading"
@@ -145,13 +146,8 @@ const pathRemove = (file, fileList, keys) => {
               sizeName="10MB"
               :limit="3"
               multiple
-              @pathSuccess="
-                (response, file, fileList) =>
-                  pathSuccess(response, file, fileList, 'banner')
-              "
-              @pathRemove="
-                (file, fileList) => pathRemove(file, fileList, 'banner')
-              "
+              @pathSuccess="(response, file, fileList) => pathSuccess(response, file, fileList, 'banner')"
+              @pathRemove="(file, fileList) => pathRemove(file, fileList, 'banner')"
             ></TuploadImg>
           </a-form-item>
           <a-form-item
@@ -167,18 +163,14 @@ const pathRemove = (file, fileList, keys) => {
               sizeName="10MB"
               :limit="3"
               multiple
-              @pathSuccess="
-                (response, file, fileList) =>
-                  pathSuccess(response, file, fileList, 'ydBanner')
-              "
-              @pathRemove="
-                (file, fileList) => pathRemove(file, fileList, 'ydBanner')
-              "
+              @pathSuccess="(response, file, fileList) => pathSuccess(response, file, fileList, 'ydBanner')"
+              @pathRemove="(file, fileList) => pathRemove(file, fileList, 'ydBanner')"
             ></TuploadImg>
           </a-form-item>
         </template>
       </Tform>
     </div>
+  </div>
 </template>
 
 <style scoped>

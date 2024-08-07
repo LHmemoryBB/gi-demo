@@ -129,7 +129,7 @@ const confirm = () => {
 
 <template>
   <div class="page-container">
-    <div class="content content_form">
+    <div class="form-container">
       <Tform
         ref="RefTform"
         :loading="loading"

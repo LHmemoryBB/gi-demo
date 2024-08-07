@@ -1,13 +1,15 @@
 <template>
-  <a-config-provider :theme="setThemeColor">
+  <ConfigProvider :theme="setThemeColor" :locale="zhCN">
     <router-view></router-view>
     <template #loading>
       <img src="/static/images/loading.gif" class="loading-icon" />
     </template>
-  </a-config-provider>
+  </ConfigProvider>
 </template>
 
 <script setup lang="ts">
+import zhCN from 'ant-design-vue/es/locale/zh_CN';
+import { ConfigProvider } from 'ant-design-vue';
 defineOptions({ name: 'App' })
 import { useAppStore } from '@/store'
 import {computed, reactive} from 'vue'
