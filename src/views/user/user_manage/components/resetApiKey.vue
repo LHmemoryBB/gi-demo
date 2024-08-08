@@ -4,7 +4,6 @@ import { useAxios } from '@/hooks'
 import { setResetApiKey } from '@/api/index'
 import { notification } from 'ant-design-vue'
 import { Modal } from 'ant-design-vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
 const emit = defineEmits()
 
 //open初始
@@ -12,7 +11,7 @@ const on_init = (row) => {
   const { data, onSuccess, onError, send } = useAxios(setResetApiKey, {
     immediate: false
   })  
-  ElMessageBox.confirm('是否重置秘钥？', {
+  Modal.confirm('是否重置秘钥？', {
     title: '提示',
     confirmButtonText: '确认',
     cancelButtonText: '取消',

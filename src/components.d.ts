@@ -10,6 +10,7 @@ declare module 'vue' {
     Breadcrumb: typeof import('./components/Breadcrumb/index.vue')['default']
     CateTree: typeof import('./components/CateTree/index.vue')['default']
     copy: typeof import('./components/Templates/Ttable copy.vue')['default']
+    Dianxin: typeof import('./components/orderTemplate/dianxin.vue')['default']
     FileUpload: typeof import('./components/Templates/fileUpload.vue')['default']
     FileUploader: typeof import('./components/GiUpload/fileUploader.vue')['default']
     GiChart: typeof import('./components/GiChart/index.vue')['default']
@@ -34,6 +35,7 @@ declare module 'vue' {
     IconTreeAdd: typeof import('./components/icons/IconTreeAdd.vue')['default']
     IconTreeReduce: typeof import('./components/icons/IconTreeReduce.vue')['default']
     ImageUploader: typeof import('./components/Templates/ImageUploader.vue')['default']
+    Liantong: typeof import('./components/orderTemplate/liantong.vue')['default']
     ParentView: typeof import('./components/ParentView/index.vue')['default']
     RightMenu: typeof import('./components/CateTree/RightMenu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -52,5 +54,6 @@ declare module 'vue' {
     VerifyPoints: typeof import('./components/verifition/Verify/VerifyPoints.vue')['default']
     VerifySlide: typeof import('./components/verifition/Verify/VerifySlide.vue')['default']
     WangEdior: typeof import('./components/WangEdior/index.vue')['default']
+    Yidong: typeof import('./components/orderTemplate/yidong.vue')['default']
   }
 }

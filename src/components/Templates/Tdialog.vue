@@ -34,6 +34,7 @@
 		:maskClosable="!Update.modal" 
 		lock-scroll
 		append-to-body
+
 		destroyOnClose
 		@cancel="close">
 		<template #title=>
@@ -45,7 +46,7 @@
 		<template #footer v-if="!footer_hide">
 			<div class="dialog-footer">
 		        <a-button @click="Update.isShow = false">取消</a-button>
-		        <a-button :loading="loading" type="primary" @click="emit('confirm')">确认</a-button>
+		        <a-button :loading="loading" type="primary" @click="emit('confirm')">提交</a-button>
 			</div>
 		</template>
 	</Modal>

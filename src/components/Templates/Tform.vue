@@ -176,8 +176,8 @@ defineExpose({
     <a-form-item v-if="!btn_hide">
       <!-- <a-space> -->
       <div class="btn_class">
-        <a-button :loading="loading" type="primary" @click="submitForm()">{{ querytext }}</a-button>
-        <a-button @click="resetForm()" v-if="!hidden_refresh" class="_btn">清空</a-button>
+        <a-button :loading="loading" type="primary" @click="submitForm()" ghost>{{ querytext }}</a-button>
+        <a-button danger @click="resetForm()" v-if="!hidden_refresh" class="_btn">清空</a-button>
         <slot name="operation"></slot>
       </div>
       <!-- </a-space> -->

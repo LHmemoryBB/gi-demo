@@ -6,7 +6,6 @@ import { useAxios } from '@/hooks'
 import { getUserPrice, setUserPrice } from '@/api/index'
 import { notification } from 'ant-design-vue'
 import { Modal } from 'ant-design-vue'
-import { ElMessageBox } from 'element-plus'
 
 const emit = defineEmits()
 let Update = reactive({
