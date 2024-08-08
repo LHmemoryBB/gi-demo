@@ -7,6 +7,12 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  .ant-form-item {
+    margin: 10px;
+    button {
+      margin-left: 10px;
+    }
+  }
   .form-container {
     flex: 0 0 auto; /* Form height is auto */
     // padding: 10px;
@@ -16,7 +22,7 @@
   }
   .table-container {
     flex: 1 1 auto; /* Take up remaining space */
-    overflow-y: hidden; /* Enable vertical scroll */
+    overflow-y: auto; /* Enable vertical scroll */
     padding: 10px;
     background: #fff;
     border-radius: 10px;
