@@ -15,7 +15,7 @@ export default function switch_beforeChange(api, form, row, key) {
 			notification.success({
 				message: '提示',
 				description: res.message,
-				duration: 3000
+				duration: 3
 			});
 			return resolve(true)
 		})
@@ -24,7 +24,7 @@ export default function switch_beforeChange(api, form, row, key) {
 			notification.success({
 				message: '提示',
 				description: err.message || '修改失败',
-				duration: 3000
+				duration: 3
 			});
 			return reject(new Error('Error'))
 		})

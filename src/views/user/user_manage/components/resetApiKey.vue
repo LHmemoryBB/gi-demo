@@ -28,7 +28,7 @@ const on_init = (row) => {
           notification.success({
             title: '提示',
             message: '重置成功!',
-            duration: 3000
+            duration: 3
           })
           done()
         })
@@ -40,7 +40,7 @@ const on_init = (row) => {
           notification.error({
             title: '提示',
             message: res.data?.message || '重置操作失败！',
-            duration: 3000
+            duration: 3
           })
         })
       } else {

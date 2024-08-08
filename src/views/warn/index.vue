@@ -83,7 +83,7 @@ const on_init = () => {
     notification.error({
     	message: '提示',
     	description:  res.message || '数据异常！',
-    	duration: 3000
+    	duration: 3
     })
   })
 }
@@ -102,14 +102,14 @@ onSuccess((res) => {
   notification.success({
   	message: '提示',
   	description: res.message || '修改成功!',
-  	duration: 3000
+  	duration: 3
   })
 })
 onError((res) => {
   notification.error({
   	message: '提示',
   	description:  res.message || '修改失败！',
-  	duration: 3000
+  	duration: 3
   })
 })
 

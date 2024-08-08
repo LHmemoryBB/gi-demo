@@ -69,7 +69,7 @@ getError((res) => {
   notification.error({
     title: '提示',
     message: res.data.message ?? '获取资料失败！',
-    duration: 3000
+    duration: 3
   })
   Update.isShow = false
 })
@@ -95,7 +95,7 @@ onSuccess((res) => {
   notification.success({
     title: '提示',
     message: '新增成功!',
-    duration: 3000
+    duration: 3
   })
   emit('onSuccess')
   Update.isShow = false
@@ -104,7 +104,7 @@ onError((res) => {
   notification.error({
     title: '提示',
     message: res.data.message ?? '新增失败！',
-    duration: 3000
+    duration: 3
   })
 })
 

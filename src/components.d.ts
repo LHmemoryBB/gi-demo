@@ -10,7 +10,7 @@ declare module 'vue' {
     Breadcrumb: typeof import('./components/Breadcrumb/index.vue')['default']
     CateTree: typeof import('./components/CateTree/index.vue')['default']
     copy: typeof import('./components/Templates/Ttable copy.vue')['default']
-    FileUpload: typeof import('./components/GiUpload/fileUpload.vue')['default']
+    FileUpload: typeof import('./components/Templates/fileUpload.vue')['default']
     FileUploader: typeof import('./components/GiUpload/fileUploader.vue')['default']
     GiChart: typeof import('./components/GiChart/index.vue')['default']
     GiDot: typeof import('./components/GiDot/index.vue')['default']
@@ -46,9 +46,11 @@ declare module 'vue' {
     Tselect: typeof import('./components/Templates/Tselect.vue')['default']
     Ttable: typeof import('./components/Templates/Ttable.vue')['default']
     TuploadImg: typeof import('./components/Templates/TuploadImg.vue')['default']
+    TuploadPdf: typeof import('./components/Templates/TuploadPdf.vue')['default']
     UplaodImg: typeof import('./components/GiUpload/uplaodImg.vue')['default']
     Verify: typeof import('./components/verifition/Verify.vue')['default']
     VerifyPoints: typeof import('./components/verifition/Verify/VerifyPoints.vue')['default']
     VerifySlide: typeof import('./components/verifition/Verify/VerifySlide.vue')['default']
+    WangEdior: typeof import('./components/WangEdior/index.vue')['default']
   }
 }

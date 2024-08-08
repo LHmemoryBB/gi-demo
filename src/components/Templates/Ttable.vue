@@ -102,16 +102,16 @@ const editInputRef = ref()
 const dblclick = (index, row) => {
   editableData.value = JSON.parse(JSON.stringify(row))
   editableData.value.tableInputIndex = index
-  nextTick(() =>{
+  nextTick(() => {
     editInputRef.value.focus()
   })
 }
 
 // 关闭编辑状态
-	const hideInput = (row) => {
-		editableData.value = {}
-		emit('change_edit', row)
-	}
+const hideInput = (row) => {
+  editableData.value = {}
+  emit('change_edit', row)
+}
 
 let lodRow = null
 //点击行切换选中状态
@@ -141,7 +141,7 @@ const { height: wrapperElHeight } = useElementSize(TableContainerRef)
 
 const scrollConfig = computed(() => {
   return {
-    y: props.tableHeight ? props.tableHeight : wrapperElHeight.value - 102,
+    y: props.tableHeight ? props.tableHeight : wrapperElHeight.value - 152,
     x: toValue(702)
   }
 })
@@ -157,43 +157,45 @@ defineExpose({
     <div class="table_head">
       <slot></slot>
     </div>
-    <Table
-      ref="TableRef"
-      :data-source="props.tableData"
-      bordered
-      :columns="headers"
-      :loading="loading"
-      :pagination="pagination"
-      style="width: 100%"
-      @row-click="rowSelection"
-      @selection-change="onSelectChange"
-      @select="onSelect"
-      size="small"
-      :scroll="scrollConfig"
-    >
-      <!-- <template v-slot:headerCell="{ column }">
+    <div>
+      <Table
+        ref="TableRef"
+        :data-source="props.tableData"
+        bordered
+        :columns="headers"
+        :loading="loading"
+        :pagination="pagination"
+        style="width: 100%"
+        @row-click="rowSelection"
+        @selection-change="onSelectChange"
+        @select="onSelect"
+        size="small"
+        :scroll="scrollConfig"
+      >
+        <!-- <template v-slot:headerCell="{ column }">
         <span class="title2" :style="{ whiteSpace: 'nowrap', fontWeight: 'normal' }">{{ column.title }}</span>
       </template> -->
-      <template v-slot:bodyCell="{ column, text, record, index }">
-        <template v-if="column.type === 'slot'">
-          <slot :name="column.dataIndex" :column="column" :record="record"></slot>
-        </template>
-        <template v-else-if="column.type === 'edit'">
-          <!-- {{column}}-{{text}}-{{record}}-{{index}} -->
-          <div class="editable-cell">
-            <div v-if="editableData.tableInputIndex === index" class="editable-cell-input-wrapper">
-              <a-input v-model:value="record[column.dataIndex]" ref="editInputRef" @blur="hideInput(record)"/>
+        <template v-slot:bodyCell="{ column, text, record, index }">
+          <template v-if="column.type === 'slot'">
+            <slot :name="column.dataIndex" :column="column" :record="record"></slot>
+          </template>
+          <template v-else-if="column.type === 'edit'">
+            <!-- {{column}}-{{text}}-{{record}}-{{index}} -->
+            <div class="editable-cell">
+              <div v-if="editableData.tableInputIndex === index" class="editable-cell-input-wrapper">
+                <a-input v-model:value="record[column.dataIndex]" ref="editInputRef" @blur="hideInput(record)" />
+              </div>
+              <div v-else class="editable-cell-text-wrapper" @dblclick="dblclick(index, record)">
+                {{ record[column.dataIndex] || ' ' }}
+              </div>
             </div>
-            <div v-else class="editable-cell-text-wrapper" @dblclick="dblclick(index, record)">
-              {{ record[column.dataIndex] || ' ' }}
-            </div>
-          </div>
+          </template>
+          <template v-else>
+            {{ record[column.dataIndex] }}
+          </template>
         </template>
-        <template v-else>
-          {{ record[column.dataIndex] }}
-        </template>
-      </template>
-    </Table>
+      </Table>
+    </div>
   </div>
 </template>
 <style scoped>

@@ -19,7 +19,7 @@
 		notification.error({
 			message: '提示',
 			description:  res.message || '请求失败！',
-			duration: 3000
+			duration: 3
 		})
 	})
 	

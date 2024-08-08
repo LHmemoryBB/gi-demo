@@ -1,15 +1,13 @@
 <script setup>
-	import { ref, reactive, toRaw , defineEmits, defineExpose } from 'vue'
+	import { ref, reactive, defineEmits, defineExpose } from 'vue'
 	import Tdialog from '@/components/Templates/Tdialog.vue';
 	import Tform from '@/components/Templates/Tform.vue';
 	import { useAxios } from '@/hooks'
-	import { setResetPassword } from '@/api/index'
-	import md5 from 'js-md5';
+	import { setProductCategoryEdit } from '@/api/index'
 	import { notification } from 'ant-design-vue'
-
 	const emit = defineEmits();
 	let Update = reactive({
-		title: '重置密码',
+		title: '修改',
 		width:'580px',
 		isShow: false,
 		modal:true,
@@ -17,33 +15,41 @@
 	})
 	
 	const _state = ()=>({
-		userId:'',
-		password:''
+		id:'',
+		categoryName:'',
+		pid:'',
+		categorySort:''
 	})
-	const validatorPhone = (rule, value, callback) => {
-		const reg = /^1[3456789]\d{9}$/;
-		if (!reg.test(value)) {
-			callback(new Error('请输入正确的手机号'));
-		} else {
-			callback();
-		}
-	}
+		
 	const ruleForm = reactive(_state());
 	const listInput = [
 		{
 			type:'input',
-			label: '新密码',
-			prop: 'password',
-			rules: { required: true, message: '请输入新密码' }
+			label: '分类名称',
+			prop: 'categoryName',
+			rules: { required: true, message: '请输入分类名称' }
+		},{
+			type: 'select',
+			label: '所属父类',
+			prop: 'pid',
+			_url: '/productCategory/category',
+			filterable: true,
+			rules: { required: true, message: '请输入运营商' },
+			disabled:true
+		},
+		{
+			type:'input',
+			label: '排序',
+			prop: 'categorySort',
+			rules: { required: true, message: '请输入排序' }
 		}
 	]
 	//open初始
 	const on_init = (row)=> {
-		console.log('12312312321');
-		
-		row = toRaw(row)
 		Update.isShow = true
-		ruleForm['userId'] = row['id'] ?? ''
+		for(let keys in ruleForm){
+			ruleForm[keys] = row[keys] ?? ''
+		}
 	}
 	//关闭
 	const RefTform = ref(null)
@@ -51,14 +57,13 @@
 		RefTform.value?.resetForm()
 	}
 	
-	const { loading, data, onSuccess, onError, send } = useAxios(setResetPassword,{
+	const { loading, data, onSuccess, onError, send } = useAxios(setProductCategoryEdit,{
 		immediate:false
 	});
 	onSuccess((res)=>{
 		notification.success({
 			message: '提示',
-			description: res.message || '新增成功!',
-			duration: 3
+			description: res.message || '修改成功!',
 		})
 		emit('onSuccess')
 		Update.isShow = false
@@ -66,18 +71,13 @@
 	onError((res)=>{
 		notification.error({
 			message: '提示',
-			description:  res.message || '新增失败！',
-			duration: 3
+			description: res.message || '修改成功!',
 		})
 	})
 	
 	//提交
 	const submit = (type)=>{
-		let data = {
-			...ruleForm,
-			password:md5(ruleForm.password),
-		}
-		send(data)
+		send(ruleForm)
 	}
 	//确认
 	const confirm = ()=>{
@@ -92,6 +92,7 @@
 <template>
 	<Tdialog :Update="Update" :loading="loading" @confirm="confirm" @close="close">
 		<Tform ref="RefTform" :loading="loading" :ruleForm="ruleForm" :listInput="listInput" @submit="submit" label_width="120px" btn_hide>
+			
 		</Tform>
 	</Tdialog>
 </template>

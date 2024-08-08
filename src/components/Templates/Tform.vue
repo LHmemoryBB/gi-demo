@@ -190,6 +190,12 @@ defineExpose({
   .btn_class {
     display: flex;
   }
+  .ant-form-item {
+    margin: 10px;
+    button {
+      margin-left: 10px;
+    }
+  }
   label {
     /* min-width: 150px; */
     text-align: right;

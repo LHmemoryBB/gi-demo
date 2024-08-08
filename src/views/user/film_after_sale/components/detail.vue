@@ -4,6 +4,7 @@ import Tdialog from "@/components/Templates/Tdialog.vue";
 import Tform from "@/components/Templates/Tform.vue";
 import { useAxios } from "@/hooks";
 import { AfterSaleDetail, AfterSaleApproved } from "@/api/index";
+import { notification } from 'ant-design-vue'
 const emit = defineEmits(["onSuccess"]);
 
 let Approval = reactive({
@@ -57,10 +58,10 @@ onSuccess((res) => {
   Approval.isShow = true;
 });
 onError((res) => {
-  ElNotification.error({
+  notification.error({
     title: "提示",
     message: res.message || "请求失败！",
-    duration: 3000,
+    duration: 3,
   });
 });
 const {
@@ -71,19 +72,19 @@ const {
   immediate: false,
 });
 submitSuccess((res) => {
-  ElNotification.success({
+  notification.success({
     title: "提示",
     message: res.message || "请求成功!",
-    duration: 3000,
+    duration: 3,
   });
   emit("onSuccess");
   Approval.isShow = false;
 });
 submitError((res) => {
-  ElNotification.error({
+  notification.error({
     title: "提示",
     message: res.message || "请求失败！",
-    duration: 3000,
+    duration: 3,
   });
 });
 

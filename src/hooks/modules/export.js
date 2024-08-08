@@ -72,7 +72,7 @@ export const onExport = (url, data) => {
 				notification.success({
 					title: '提示',
 					message: '导出成功!',
-					duration: 3000
+					duration: 3
 				})
 				resolve()
 			}
@@ -81,7 +81,7 @@ export const onExport = (url, data) => {
 			notification.error({
 				title: '提示',
 				message: '导出失败！',
-				duration: 3000
+				duration: 3
 			})
 			reject()
 		})

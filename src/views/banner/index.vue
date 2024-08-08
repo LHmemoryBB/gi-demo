@@ -55,7 +55,7 @@ const on_init = () => {
     notification.error({
       title: '提示',
       message: res.message || '数据异常！',
-      duration: 3000
+      duration: 3
     })
   })
 }
@@ -74,14 +74,14 @@ onSuccess((res) => {
   notification.success({
     title: '提示',
     message: res.message || '配置成功!',
-    duration: 3000
+    duration: 3
   })
 })
 onError((res) => {
   notification.error({
     title: '提示',
     message: res.message || '配置失败！',
-    duration: 3000
+    duration: 3
   })
 })
 

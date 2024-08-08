@@ -119,7 +119,7 @@ onSuccess((res) => {
   notification.success({
     message: '提示',
     description: res.message || '修改成功!',
-    duration: 3000
+    duration: 3
   })
   emit('onSuccess')
   Update.isShow = false
@@ -128,7 +128,7 @@ onError((res) => {
   notification.error({
     message: '提示',
     description: res.message || '修改失败！',
-    duration: 3000
+    duration: 3
   })
 })
 
