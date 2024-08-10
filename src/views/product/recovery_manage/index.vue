@@ -105,9 +105,9 @@ const onComCardType = (row) => {
         </template>
         <template #operation="{ record }">
           <div class="_btn"></div>
-          <a-button type="primary" text @click="onComEdit(record)" size="small">编辑</a-button>
-          <a-button type="primary" text @click="onComCardType(record)" class="m_l_10" size="small">配置卡种</a-button>
-          <a-button type="primary" text @click="onComDel(record)" class="m_l_10" size="small">删除</a-button>
+          <a-button type="primary" ghost @click="onComEdit(record)" size="small">编辑</a-button>
+          <a-button type="primary" ghost @click="onComCardType(record)" class="m_l_10" size="small">配置卡种</a-button>
+          <a-button danger ghost @click="onComDel(record)" class="m_l_10" size="small">删除</a-button>
         </template>
       </Ttable>
     </div>

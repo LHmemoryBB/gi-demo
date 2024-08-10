@@ -77,9 +77,7 @@
 	});
 	
 	//open初始
-	const on_init = (row)=> {
-		console.log('1231231231');
-		
+	const on_init = (row)=> {		
 		Update.isShow = true
 		Object.assign(ruleForm, _state())
 		ruleForm.userId = row.id

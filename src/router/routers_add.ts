@@ -11,12 +11,12 @@ export default function routers_add() {
       immediate: true
     })
     onSuccess((res: any) => {
-      
-      userStore.SetNavList(filterRoutes(res.data.routesMap))
+      userStore.SetNavList(filterRoutes(res.data.routesMap))      
       userStore.SetUserInfo(res.data.userInfo)
       resolve(true)
     })
-    onError(() => {
+    onError((error: any) => {    
+      console.log(error, '添加路由报错');
       userStore.logout()
     })
   })
@@ -27,7 +27,7 @@ function filterRoutes(routeJson: any, _path = '') {
   routeJson.forEach((route: any) => {
     let tmp: any = {}
     tmp = RouterCom(route, _path)
-    if (route.hasOwnProperty('children')) {
+    if (route.hasOwnProperty('children') && route.children?.length > 0) {      
       const tmpC = filterRoutes(route['children'], route?.path)
       tmpC.length > 0 && (tmp.children = tmpC)
     }
@@ -45,7 +45,8 @@ function RouterCom(item: any, _path: any) {
     meta: {
       title: item.name,
       icon: item.icon,
-      NotKeepAlive: item.NotKeepAlive || false
+      NotKeepAlive: item.NotKeepAlive || false,
+      buttons: item.buttons,
     },
     component: modules[`../views/${(_path ? _path + '/' : '') + item.path}/index.vue`]
   }

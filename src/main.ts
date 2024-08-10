@@ -29,7 +29,6 @@ import 'virtual:svg-icons-register'
 
 // 自定义指令
 import directives from './directives'
-
 const app = createApp(App)
 
 app.use(router)

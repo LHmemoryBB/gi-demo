@@ -16,21 +16,25 @@ const routes = [
     path: '/',
     name: 'home',
     meta: { title: '壹壹中控后台', icon: 'HomeFilled',  },
-    redirect:'noRedirect',
+    redirect:'/config',
     component: Layout,
-    children: [{ path: '/', name: 'case', component: () => import('@/views/config/index.vue') }]
+    children: [{ path: '/:catchAll(.*)', meta: { title: '404' }, component: () => import('@/views/error/404.vue') }]
   },
   {
     path: '/login',
     component: () => import('@/views/login/index.vue'),
     meta: { hidden: true }
   },
-  { path: '/:catchAll(.*)', meta: { title: '404' }, component: () => import('@/views/error/404.vue') }
+  
 ]
 const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
+
+export function getCurrentRoute () {
+  return router.currentRoute
+};
 
 /** 重置路由 */
 export function resetRouter() {

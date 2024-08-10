@@ -126,8 +126,8 @@ defineExpose({
     <a-button type="primary" @click="onComAdd(ruleForm)">新增</a-button>
     <Ttable :loading="loading" :headers="headers" :tableData="data" :pages="pages" :tableHeight="600">
       <template #operation="{ record }">
-        <a-button type="primary" text @click="onComEdit(record)" size="small" >编辑</a-button>
-        <a-button type="primary" text @click="onComDel(record)" size="small" class="m_l_10">删除</a-button>
+        <a-button type="primary" ghost @click="onComEdit(record)" size="small" >编辑</a-button>
+        <a-button danger ghost @click="onComDel(record)" size="small" class="m_l_10">删除</a-button>
       </template>
     </Ttable>
     <ComEdit ref="ComEditRef" @onSuccess="submit('form')" />

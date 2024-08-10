@@ -5,7 +5,7 @@ import { setMaintenanceClear } from '@/api/index'
 import Tform from '@/components/Templates/Tform.vue'
 import Ttable from '@/components/Templates/Ttable.vue'
 import dayjs from 'dayjs'
-import { notification } from 'ant-design-vue'
+import { notification, Modal } from 'ant-design-vue'
 
 const ruleForm = reactive({
   date: ''
@@ -19,51 +19,37 @@ const { loading, data, onSuccess, onError, send } = useAxios(setMaintenanceClear
 onSuccess((res) => {
   notification.success({
     message: '提示',
-    description: res.data || '清除成功!',
+    description: res.data || '清除成功!'
   })
 })
 onError((res) => {
   notification.error({
     message: '提示',
-    description: res.message || '清除失败！',
+    description: res.message || '清除失败！'
   })
 })
 
 const submit = (type) => {
-  ElMessageBox.confirm('确认清除后不可恢复，是否继续？', {
-    title: '提示',
-    confirmButtonText: '确认',
-    cancelButtonText: '取消',
-    beforeClose: (action, instance, done) => {
-      if (action === 'confirm') {
-        instance.confirmButtonLoading = true
-        instance.confirmButtonText = 'Loading...'
-        send()
-        onSuccess((res) => {
-          setTimeout(() => {
-            instance.confirmButtonLoading = false
-          }, 300)
-          notification.success({
-            message: '提示',
-            description: '清除成功!',
-          })
-          done()
+  Modal.confirm({
+    title: '确认清除后不可恢复，是否继续？',
+    onText: '确认',
+    cancelText: '取消',
+    onOk() {
+      send()
+      onSuccess((res) => {
+        notification.success({
+          message: '提示',
+          description: '清除成功!'
         })
-        onError((res) => {
-          setTimeout(() => {
-            instance.confirmButtonLoading = false
-            instance.confirmButtonText = '重试'
-          }, 300)
-          notification.error({
-            message: '提示',
-            description: res.data.message || '清除失败！',
-          })
+      })
+      onError((res) => {
+        notification.error({
+          message: '提示',
+          description: res.data?.message || '清除失败！'
         })
-      } else {
-        done()
-      }
+      })
     }
-  }).catch(() => {})
+  })
 }
 const resetForm = () => {
   data.value = []

@@ -101,7 +101,7 @@
 		<Tform ref="RefTform" :loading="loading" :ruleForm="ruleForm" :listInput="listInput" @submit="submit" label_width="120px" btn_hide>
 			<template #discount="scope">
 				<a-form-item label="回收百分比" :rules="{ required: true, message: '请输入回收百分比,范围0-100'}" name="discount" lalabel-width="120px">
-					<a-input v-model="ruleForm.discount" ></a-input>
+					<a-input v-model:value="ruleForm.discount" ></a-input>
 					<div style="color: red;">范围(0-100)%,注意是百分比！！！</div>
 				</a-form-item>
 			</template>

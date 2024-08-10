@@ -251,9 +251,7 @@ const onComInterfaceProductDetails = (index) => {
 }
 
 //接口配置选择返回
-const onChoice = (type, row) => {
-  console.log(type, row, '接口配置选择返回');
-  
+const onChoice = (type, row) => {  
   if (type == 'interfaceProductList') {
     ruleForm.interfaceConfigs[interfaceConfigsIndex].interfaceId = row.id
     ruleForm.interfaceConfigs[interfaceConfigsIndex].interfaceName = row.interfaceName

@@ -136,7 +136,7 @@ const pathRemove = (file, fileList, keys) => {
         <template #all="scope">
           <a-form-item
             label="PC轮播图"
-            :prop="'banner'"
+            :name="'banner'"
             :rules="{ required: true, message: '请添加图片' }"
             laba-width="120px"
           >
@@ -153,7 +153,7 @@ const pathRemove = (file, fileList, keys) => {
           </a-form-item>
           <a-form-item
             label="移动轮播图"
-            :prop="'ydBanner'"
+            :name="'ydBanner'"
             :rules="{ required: true, message: '请添加图片' }"
             laba-width="120px"
           >

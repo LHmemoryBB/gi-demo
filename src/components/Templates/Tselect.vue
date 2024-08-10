@@ -35,7 +35,7 @@ const visibleChange = (v) => {
     params: props.params
   })
 }
-const selectChange = (v) => {
+const selectChangeFnc = (v) => {
   emit('selectChange', v, props.listInput)
 }
 //默认请求
@@ -50,7 +50,7 @@ if (!props.listInput.default_not_request) visibleChange(true)
     v-model:value="ruleForm[listInput.prop]"
     :placeholder="listInput.placeholder ? listInput.placeholder : '请选择' + listInput.label"
     :loading="listInput.options ? false : loading"
-    @change="selectChange"
+    @change="selectChangeFnc"
     @dropdownVisibleChange="visibleChange"
     :filterable="listInput.filterable"
     :multiple="listInput.multiple"

@@ -70,7 +70,7 @@ const { loading, data, onSuccess, onError, send } = useAxios(setCardCategoryAdd,
 onSuccess((res) => {
   notification.success({
     message: '提示',
-    description: res.message || '新增成功!',
+    description: res.message || '新增成功!'
   })
   emit('onSuccess')
   Update.isShow = false
@@ -78,7 +78,7 @@ onSuccess((res) => {
 onError((res) => {
   notification.error({
     message: '提示',
-    description: res.message || '新增失败！',
+    description: res.message || '新增失败！'
   })
 })
 
@@ -110,7 +110,8 @@ defineExpose({
       <template #color="scope">
         <a-form-item label="背景色" name="color" label-width="120px">
           <!-- <el-color-picker v-model="ruleForm.color" /> -->
-		  <!-- <ColorPicker /> -->
+          <!-- <ColorPicker /> -->
+          <input type="color" v-model="ruleForm.color" />
         </a-form-item>
       </template>
     </Tform>

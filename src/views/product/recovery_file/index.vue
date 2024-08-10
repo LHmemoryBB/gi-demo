@@ -120,8 +120,8 @@ const pathRemove = (file, fileList, keys) => {
 </script>
 
 <template>
-  <div>
-    <!-- <div class="content content_form">
+  <div class="page-container">
+    <div class="form-container">
       <Tform
         ref="RefTform"
         :loading="loading"
@@ -134,7 +134,7 @@ const pathRemove = (file, fileList, keys) => {
         <template #recoveryAgreement="scope">
           <a-form-item
             label="回收协议"
-            :prop="'recoveryAgreement'"
+            :name="'recoveryAgreement'"
             :rules="{ required: true, message: '请上传pdf文件' }"
             label-width="120px"
           >
@@ -149,7 +149,7 @@ const pathRemove = (file, fileList, keys) => {
         <template #recoveryExplanation="scope">
           <a-form-item
             label="回收说明"
-            :prop="'recoveryExplanation'"
+            :name="'recoveryExplanation'"
             :rules="{ required: true, message: '请上传pdf文件' }"
             label-width="120px"
           >
@@ -162,7 +162,7 @@ const pathRemove = (file, fileList, keys) => {
           </a-form-item>
         </template>
       </Tform>
-    </div> -->
+    </div>
   </div>
 </template>
 

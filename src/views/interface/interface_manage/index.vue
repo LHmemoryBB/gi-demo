@@ -178,7 +178,7 @@ const switch_enabled_beforeChange = (row) => {
         <template #operation="{ record }">
           <a-button type="primary" ghost @click="onComEdit(record)" size="small" >编辑</a-button>
           <a-button type="primary" ghost @click="onComInterfaceProductEdit(record)" size="small" class="m_l_10">套餐配置</a-button>
-          <a-button type="primary" ghost @click="onComDel(record)" size="small" class="m_l_10">删除</a-button>
+          <a-button danger ghost @click="onComDel(record)" size="small" class="m_l_10">删除</a-button>
         </template>
       </Ttable>
     </div>

@@ -1,142 +1,155 @@
-<script setup>
-import { ref, computed } from 'vue'
-import { getToken } from '@/utils/auth'
+<template>
+  <a-upload-dragger
+    :action="up_img_api()"
+    v-model:file-list="fileList"
+    :headers="headers"
+    :maxCount="limit"
+    @change="handleChange"
+    @remove="handleRemove"
+    :before-upload="beforeUpload"
+    :multiple="multiple"
+    accept=".pdf"
+  >
+  <p class="ant-upload-drag-icon">
+      <inbox-outlined></inbox-outlined>
+    </p>
+    <p class="ant-upload-hint">
+      将文件拖拽到此处或点击上传文件
+    </p>
+    <p class="ant-upload-hint">
+      限制pdf文件大小不能超过10MB
+    </p>
+  </a-upload-dragger>
+</template>
 
+<script setup lang="ts">
+import { ref, reactive, defineEmits, defineProps, computed } from 'vue'
+import { message } from 'ant-design-vue'
+import { getToken } from '@/utils/auth' // 请根据实际路径调整
+import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue'
+import { useAxios } from '@/hooks'
+import { upload_img_single } from '@/api/index'
+import type { UploadChangeParam } from 'ant-design-vue';
+import { InboxOutlined } from '@ant-design/icons-vue';
+const emit = defineEmits(['pathSuccess', 'pathRemove'])
 const props = defineProps({
-  action: {
-    type: [Function],
-    default: () => {}
-  },
   fileList: {
     type: [Array, String],
-    default: []
+    default: () => []
   },
-  uploadLimit: {
+  limit: {
     type: Number,
     default: 1
   },
   size: {
     type: Number,
-    default: 10 * 2014 * 2014
-  },
-  fileType: {
-    type: String,
-    default: 'application/pdf'
+    default: 2
   },
   sizeName: {
     type: String,
-    default: '10MB'
+    default: '2MB'
   },
   multiple: {
     type: Boolean,
     default: false
+  },
+  up_img_api: {
+    type: Function,
+    default: () => ''
   }
 })
-const emit = defineEmits()
-const showProgress = ref(false)
-const uploadProgress = ref(0)
-const uploadedCount = ref(0)
-const uploadLimitReached = computed(() => uploadedCount.value >= props.uploadLimit)
-var regex = /[!@#$%^&*()_|<>{}]/g
+const hideUpload = ref(false)
+const headers = ref({})
 
-// const setHeaders = () => {
-// 	return {
-// 			'Authorization': getToken('_token'),
-// 			'X-CSRF-TOKEN':getToken('XSRF-TOKEN'),
-// 			'X-XSRF-TOKEN':getToken('XSRF-TOKEN')
-// 			}
-// }
+const internalFileList = ref([]);
 
-const getFileList = () => {
-  return props.fileList.map((item) => {
-    return {
-      name: item.name,
-      response: item.response
+// 基于 props.fileList 和 internalFileList 创建一个计算属性
+let fileList = computed({
+  get() {
+    if (Array.isArray(props.fileList)) {
+      internalFileList.value = [...props.fileList]; // 复制 props 到内部状态
     }
-  })
-}
-
-const beforeUpload = (file) => {
-  if (regex.test(file.name)) {
-    ElMessage.error('文件名称包含非法字符( !@#$%^&*()_|<>{} )，请修改后重新提交!')
-    return false
+    return internalFileList.value;
+  },
+  set(newValue) {
+    // 当外部尝试修改计算属性时，更新内部状态
+    internalFileList.value = newValue;
   }
+});
+var regex = /[!@#$%^&*()_|<>{}]/g;
+const beforeUpload = (file: File) => {
+  setHeaders()
+  const isValidSize = file.size / 1024 / 1024 <= props.size
   if (!props.fileType.includes(file.type)) {
-    ElMessage.error(`只能上传${props.fileType}文件!`)
-    return false
+    message.error(`只能上传${props.fileType}文件!`);
+    return false;
   }
-  if (file.size > props.size) {
-    ElMessage.error(`文件大小不能超过 ${props.sizeName}!`)
-    return false
+  if (!isValidSize) {
+    message.error(`文件大小不能超过 ${props.sizeName}!`);
+    return false;
   }
-  showProgress.value = true
   return true
 }
 
-const onProgress = (event, file, fileList) => {
-  uploadProgress.value = event.percent
+const handleSuccess = (info: any) => {
+  emit('pathSuccess', {}, info.file, info.fileList)
 }
 
-const pathSuccess = (response, file, fileList) => {
-  console.log('pathSuccess', response)
-  showProgress.value = false
-  emit('pathSuccess', response, file, fileList)
-  uploadedCount.value++
-  ElMessage.success('上传成功!')
+const handleChange = (info: UploadChangeParam) => {
+  fileList.value.push(info.file)
+  if (info.file.status !== 'uploading') {
+  }
+  if (info.file.status === 'done') {
+    handleSuccess(info)
+    message.success(`${info.file.name} 文件上传成功`)
+  } else if (info.file.status === 'error') {
+    fileList.value.pop()
+    message.error(`${info.file.name} 文件上传失败`)
+  }
 }
 
-const onError = (error, file, fileList) => {
-  showProgress.value = false
-  ElMessage.error('上传失败!')
+const handleRemove = (file: any) => {
+  const fileListNew = fileList.value.filter(item => item.uid !== file.uid)
+  emit('pathRemove', file, fileListNew)
 }
 
-const onExceed = (error, file, fileList) => {
-  ElMessage.error(`限制上传最大数量为${props.uploadLimit} !`)
+const setHeaders = () => {
+  headers.value = {
+    Authorization: getToken('_token'),
+    'X-CSRF-TOKEN': getToken('XSRF-TOKEN'),
+    'X-XSRF-TOKEN': getToken('XSRF-TOKEN')
+  }
 }
 
-const pathRemove = (response, file, fileList) => {
-  emit('pathRemove', response, file, fileList)
+const previewVisible = ref(false)
+const previewImage = ref('')
+const previewTitle = ref('')
+const handlePreview = async (file: any) => {
+  if (!file.url && !file.preview) {
+    file.preview = await getBase64(file.originFileObj)
+  }
+  previewImage.value = file.url || file.preview
+  previewVisible.value = true
+  previewTitle.value = file.name || file.url.substring(file.url.lastIndexOf('/') + 1)
 }
-const pathPreview = (response, file, fileList) => {
-  emit('pathPreview', response, file, fileList)
+
+const handleCancel = () => {
+  previewVisible.value = false
+  previewTitle.value = ''
+}
+
+const getBase64 = (file: File) => {
+  return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (error) => reject(error)
+  })
 }
 </script>
 
-<template>
-  <a-upload
-    class="upload-demo"
-    :action="props.action()"
-    :file-list="getFileList()"
-    :headers="{ Authorization: getToken('_token'), 'X-XSRF-TOKEN': getToken('XSRF-TOKEN') }"
-    :before-upload="beforeUpload"
-    :on-progress="onProgress"
-    :on-success="pathSuccess"
-    :on-error="onError"
-    :limit="props.uploadLimit"
-    :on-preview="pathPreview"
-    :on-remove="pathRemove"
-    :on-exceed="onExceed"
-    draggable
-    :multiple="props.multiple"
-    accept=".pdf"
-    image-preview
-  >
-  </a-upload>
-</template>
-
-<style >
-.upload-demo {
-  width: 250px;
-}
-.upload-demo .a-upload-dragger {
-  padding: 10px;
-}
-.upload-demo .a-upload__tip {
-  line-height: 20px;
-}
-.upload-demo .a-upload-dragger .a-icon--upload {
-  font-size: 50px;
-  line-height: 50px;
-  margin-bottom: 0;
+<style>
+.ant-upload-drag{
+  width: 400px !important;
 }
 </style>

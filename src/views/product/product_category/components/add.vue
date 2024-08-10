@@ -43,9 +43,7 @@
 		}
 	]
 	//open初始
-	const on_init = ()=> {
-		console.log(123213);
-		
+	const on_init = ()=> {		
 		Update.isShow = true
 		Object.assign(ruleForm, _state())
 		ruleForm.whiteIps = [{website:''}]

@@ -7,46 +7,30 @@ import { Modal } from 'ant-design-vue'
 const emit = defineEmits()
 
 //open初始
-const on_init = (row) => {  
+const on_init = (row) => {
   const { data, onSuccess, onError, send } = useAxios(setResetApiKey, {
     immediate: false
-  })  
-  Modal.confirm('是否重置秘钥？', {
-    title: '提示',
-    confirmButtonText: '确认',
-    cancelButtonText: '取消',
-    beforeClose: (action, instance, done) => {
-      if (action === 'confirm') {
-        instance.confirmButtonLoading = true
-        instance.confirmButtonText = 'Loading...'
-        send({ id: row.id })
-        onSuccess((res) => {
-          setTimeout(() => {
-            instance.confirmButtonLoading = false
-          }, 300)
-          notification.success({
-            title: '提示',
-            message: '重置成功!',
-            duration: 3
-          })
-          done()
+  })
+  Modal.confirm({
+    title: '是否重置秘钥?',
+    onText: '确认',
+    cancelText: '取消',
+    onOk() {
+      send({ id: row.id })
+      onSuccess((res) => {
+        notification.success({
+          message: '提示',
+          description: '重置成功!'
         })
-        onError((res) => {
-          setTimeout(() => {
-            instance.confirmButtonLoading = false
-            instance.confirmButtonText = '重试'
-          }, 300)
-          notification.error({
-            title: '提示',
-            message: res.data?.message || '重置操作失败！',
-            duration: 3
-          })
+      })
+      onError((res) => {
+        notification.error({
+          message: '提示',
+          description: res.data?.message || '重置操作失败！'
         })
-      } else {
-        done()
-      }
+      })
     }
-  }).catch(() => {})
+  })
 }
 
 defineExpose({

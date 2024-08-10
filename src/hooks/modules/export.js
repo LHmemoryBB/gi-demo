@@ -41,7 +41,6 @@ export const onExport = (url, data) => {
 			try {
 				const parsedObject = JSON.parse(textContent);
 				//解析成功，该变量是一个对象
-				console.log(parsedObject)
 				if (parsedObject.code !== 2001) {
 					message.error(parsedObject.message || '导出错误')
 				}

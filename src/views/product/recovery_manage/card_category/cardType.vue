@@ -138,9 +138,9 @@ defineExpose({
         <img style="width: 100px; height: 100px" :src="record.background" fit />
       </template>
       <template #operation="{ record }">
-        <a-button type="primary" text @click="onComEdit(record)" size="small">编辑</a-button>
-        <a-button type="primary" text @click="onComCardPar(record)" size="small" class="m_l_10">配置面值</a-button>
-        <a-button type="primary" text @click="onComDel(record)" size="small" class="m_l_10">删除</a-button>
+        <a-button type="primary" ghost @click="onComEdit(record)" size="small">编辑</a-button>
+        <a-button type="primary" ghost @click="onComCardPar(record)" size="small" class="m_l_10">配置面值</a-button>
+        <a-button danger ghost @click="onComDel(record)" size="small" class="m_l_10">删除</a-button>
       </template>
     </Ttable>
     <ComEdit ref="ComEditRef" @onSuccess="submit('form')" />

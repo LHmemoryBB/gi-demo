@@ -14,7 +14,6 @@
   >
     <div v-if="fileList.length < props.limit">
       <plus-outlined />
-      <div style="margin-top: 8px">Upload</div>
     </div>
   </a-upload>
   <a-modal :open="previewVisible" title="" :footer="null" @cancel="handleCancel">
@@ -26,7 +25,10 @@
 import { ref, reactive, defineEmits, defineProps, computed } from 'vue'
 import { message } from 'ant-design-vue'
 import { getToken } from '@/utils/auth' // 请根据实际路径调整
-import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue';
+import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue'
+import { useAxios } from '@/hooks'
+import { upload_img_single } from '@/api/index'
+import type { UploadChangeParam } from 'ant-design-vue';
 
 const emit = defineEmits(['pathSuccess', 'pathRemove'])
 const props = defineProps({
@@ -57,16 +59,22 @@ const props = defineProps({
 })
 const hideUpload = ref(false)
 const headers = ref({})
-let fileList = reactive([])
-fileList = computed(() => {
-  const list = Array.isArray(props.fileList) ? props.fileList : []
-  return list
-})
 
-const getFileList = () => {
-  const list = Array.isArray(props.fileList) ? props.fileList : []
-  return list
-}
+const internalFileList = ref([]);
+
+// 基于 props.fileList 和 internalFileList 创建一个计算属性
+let fileList = computed({
+  get() {
+    if (Array.isArray(props.fileList)) {
+      internalFileList.value = [...props.fileList]; // 复制 props 到内部状态
+    }
+    return internalFileList.value;
+  },
+  set(newValue) {
+    // 当外部尝试修改计算属性时，更新内部状态
+    internalFileList.value = newValue;
+  }
+});
 
 const beforeUpload = (file: File) => {
   setHeaders()
@@ -83,24 +91,26 @@ const beforeUpload = (file: File) => {
   return true
 }
 
-const handleSuccess = (response: any, file: any, fileList: any[]) => {
-  emit('pathSuccess', response, file, fileList)
+const handleSuccess = (info: any) => {
+  emit('pathSuccess', {}, info.file, info.fileList)
 }
 
 const handleChange = (info: UploadChangeParam) => {
+  fileList.value.push(info.file)
   if (info.file.status !== 'uploading') {
-    console.log(info.file, info.fileList);
   }
-  if (info.file.status === 'done') {    
-    // emit('pathSuccess', response, file, fileList)
-    message.success(`${info.file.name} file uploaded successfully`);
+  if (info.file.status === 'done') {
+    handleSuccess(info)
+    message.success(`${info.file.name} 文件上传成功`)
   } else if (info.file.status === 'error') {
-    message.error(`${info.file.name} file upload failed.`);
+    fileList.value.pop()
+    message.error(`${info.file.name} 文件上传失败`)
   }
-};
+}
 
-const handleRemove = (file: any, fileList: any[]) => {
-  emit('pathRemove', file, fileList)
+const handleRemove = (file: any) => {
+  const fileListNew = fileList.value.filter(item => item.uid !== file.uid)
+  emit('pathRemove', file, fileListNew)
 }
 
 const setHeaders = () => {

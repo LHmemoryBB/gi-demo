@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref, reactive, computed } from 'vue'
-// import { resetRouter } from '@/router'
+import { getCurrentRoute } from '@/router'
 import { getUserInfo as loginApi, logout as logoutApi } from '@/api/index'
 import { setToken, removeToken, getToken } from '@/utils/auth'
 
+let currentRoute: any = ref({})
+currentRoute.value = getCurrentRoute();
 const storeSetup = () => {
   const userInfo: any = ref({
     name: '',
@@ -56,10 +58,13 @@ const storeSetup = () => {
   const SetNavList = (obj : any)=> {    
     NavList.value = obj
   };
+  const getBtnList = ()=> {        
+    return currentRoute.value.value.meta.buttons
+  };
   const getNavList = () =>{
     return NavList.value
   }
-  return {NavList, userInfo, userName, avatar, token, roles, permissions, login, logout, SetUserInfo, resetToken, SetNavList, getNavList }
+  return {NavList, userInfo, userName, avatar, token, roles, permissions, login, logout, SetUserInfo, resetToken, SetNavList, getNavList, getBtnList }
 }
 
 export const useUserStore = defineStore('user', storeSetup, { persist: { paths: ['token'], storage: localStorage } })

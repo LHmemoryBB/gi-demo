@@ -54,7 +54,7 @@ const resetForm = () => {
         layout="inline"
         querytext="查询"
       >
-        <a-form-item label="运营商" prop="operator" :rules="{ required: true, message: '请选择运营商' }">
+        <a-form-item label="运营商" name="operator" :rules="{ required: true, message: '请选择运营商' }">
           <Tselect
             :ruleForm="ruleForm"
             :listInput="{
@@ -68,7 +68,7 @@ const resetForm = () => {
             }"
           />
         </a-form-item>
-        <a-form-item label="流水号" prop="orderId" :rules="{ required: true, message: '请选择流水号' }">
+        <a-form-item label="流水号" name="orderId" :rules="{ required: true, message: '请选择流水号' }">
           <a-input v-model="ruleForm.orderId" placeholder="请输入流水号" clearable />
         </a-form-item>
       </Tform>

@@ -7,7 +7,7 @@ import { up_image, setUserAdd } from '@/api/index'
 import TuploadImg from '@/components/Templates/TuploadImg.vue'
 import md5 from 'js-md5'
 import { notification } from 'ant-design-vue'
-import { PlusOutlined } from '@ant-design/icons-vue'
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons-vue'
 const emit = defineEmits()
 let Update = reactive({
   title: '新增',
@@ -30,9 +30,9 @@ const _state = () => ({
 const validatorPhone = (rule, value, callback) => {
   const reg = /^1[3456789]\d{9}$/
   if (!reg.test(value)) {
-    callback(new Error('请输入正确的手机号'))
+    return Promise.reject('请输入正确的手机号')
   } else {
-    callback()
+    return Promise.resolve();
   }
 }
 const ruleForm = reactive(_state())
@@ -104,7 +104,6 @@ onSuccess((res) => {
   notification.success({
     title: '提示',
     message: res.message || '新增成功!',
-    duration: 3
   })
   emit('onSuccess')
   Update.isShow = false
@@ -113,7 +112,6 @@ onError((res) => {
   notification.error({
     title: '提示',
     message: res.message || '新增失败！',
-    duration: 3
   })
 })
 
@@ -188,7 +186,7 @@ defineExpose({
       </template>
       <template #enabled="scope">
         <a-form-item label="是否启用" name="enabled" label-width="120px">
-          <a-switch v-model="ruleForm.enabled" active-text="是" inactive-text="否" inline-prompt />
+          <a-switch v-model:checked="ruleForm.enabled" checked-children="是" un-checked-children="否"  />
         </a-form-item>
       </template>
       <template #whiteIps="scope">
@@ -206,12 +204,15 @@ defineExpose({
             </div>
             <a-button
               class="m_l_10"
-              type="danger"
-              icon="DeleteFilled"
+              danger
               v-if="ruleForm.whiteIps.length > 1"
               @click="invTransitCodesRemove(index)"
-            ></a-button>
-            <a-button class="m_l_10" type="primary" @click="invTransitCodesAdd(index)">
+            >
+            <template #icon>
+                <DeleteOutlined />
+              </template>
+            </a-button>
+            <a-button class="m_l_10" type="primary" ghost @click="invTransitCodesAdd(index)">
               <template #icon>
                 <PlusOutlined />
               </template>

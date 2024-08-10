@@ -129,9 +129,7 @@
 	}
 	
 	const ComResetApiKeyRef = ref();
-	const onResetApiKeyRef = (row) => {
-		console.log('3333onResetApiKeyRef');
-		
+	const onResetApiKeyRef = (row) => {		
 		ComResetApiKeyRef.value?.on_init(row)
 	}
 	
@@ -189,20 +187,19 @@
 			<a-button type="primary" @click="onComAdd()" style="margin-left:20px" >新增</a-button>
 			<Ttable :loading="loading" :headers="headers" :tableData="data" :pages="pages">
 				<template #enabled="{record}">
-					<a-switch v-model:checked="record.enabled" active-text="是" inactive-text="否" inline-prompt
+					<a-switch v-model:checked="record.enabled" checked-children="是" un-checked-children="否"
 						:loading="record.enabled_loading"
 						@change="() =>switch_enabled_beforeChange(record)" />
 				</template>
 				<template #operation="{record}">
-					<div></div>
-					<a-button type="link" primary @click="onComBalance(record)">充值</a-button>
-					<a-button type="link" primary  @click="onComEdit(record)">编辑</a-button>
-					<a-button type="link" primary  @click="onResetPasswordRef(record)">重置密码</a-button>
-					<a-button type="link" primary  @click="onResetApiKeyRef(record)">重置秘钥</a-button>
-					<a-button type="link" primary  @click="onComResource(record)">资料填写</a-button>
-					<a-button type="link" primary  @click="onComPrice(record)">价格自定义</a-button>
-					<a-button type="link" primary  @click="onComTransaction(record)">用户账单</a-button>
-					<a-button type="link" primary  @click="onComBalanceLog(record)">余额日志</a-button>
+					<a-button type="primary" ghost @click="onComBalance(record)" class="m_l_10 m_b_10" size="small">充值</a-button>
+					<a-button type="primary" ghost @click="onComEdit(record)" class="m_l_10 m_b_10" size="small">编辑</a-button>
+					<a-button type="primary" ghost @click="onResetPasswordRef(record)" class="m_l_10 m_b_10" size="small">重置密码</a-button>
+					<a-button type="primary" ghost @click="onResetApiKeyRef(record)" class="m_l_10 m_b_10" size="small">重置秘钥</a-button>
+					<a-button type="primary" ghost @click="onComResource(record)" class="m_l_10 m_b_10" size="small">资料填写</a-button>
+					<a-button type="primary" ghost @click="onComPrice(record)" class="m_l_10 m_b_10" size="small">价格自定义</a-button>
+					<a-button type="primary" ghost @click="onComTransaction(record)" class="m_l_10 m_b_10" size="small">用户账单</a-button>
+					<a-button type="primary" ghost @click="onComBalanceLog(record)" class="m_l_10 m_b_10" size="small">余额日志</a-button>
 				</template>
 			</Ttable>
 		</div>

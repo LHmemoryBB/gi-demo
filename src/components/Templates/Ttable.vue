@@ -2,7 +2,7 @@
 import { ref, defineEmits, defineExpose, nextTick, shallowRef, toValue } from 'vue'
 import { Table } from 'ant-design-vue'
 import { useElementSize } from '@vueuse/core'
-
+import { EditOutlined } from '@ant-design/icons-vue'
 import { typeOf } from '@/hooks'
 const emit = defineEmits()
 const props = defineProps({
@@ -88,7 +88,7 @@ const onSelect = (selection, row) => {
 }
 
 //返回选中列表
-const getSelectionRows = () => {
+const getSelectionRowsFnc = () => {
   return TableRef!.getSelectionRows()
 }
 
@@ -99,7 +99,7 @@ const clearSelection = () => {
 // 行编辑,
 const editableData: any = ref({})
 const editInputRef = ref()
-const dblclick = (index, row) => {
+const dblclick = (index, row) => {  
   editableData.value = JSON.parse(JSON.stringify(row))
   editableData.value.tableInputIndex = index
   nextTick(() => {
@@ -148,7 +148,7 @@ const scrollConfig = computed(() => {
 
 defineExpose({
   clearSelection,
-  getSelectionRows
+  getSelectionRowsFnc
 })
 </script>
 
@@ -171,6 +171,7 @@ defineExpose({
         @select="onSelect"
         size="small"
         :scroll="scrollConfig"
+        rowKey="id"
       >
         <!-- <template v-slot:headerCell="{ column }">
         <span class="title2" :style="{ whiteSpace: 'nowrap', fontWeight: 'normal' }">{{ column.title }}</span>
@@ -180,13 +181,12 @@ defineExpose({
             <slot :name="column.dataIndex" :column="column" :record="record"></slot>
           </template>
           <template v-else-if="column.type === 'edit'">
-            <!-- {{column}}-{{text}}-{{record}}-{{index}} -->
             <div class="editable-cell">
               <div v-if="editableData.tableInputIndex === index" class="editable-cell-input-wrapper">
                 <a-input v-model:value="record[column.dataIndex]" ref="editInputRef" @blur="hideInput(record)" />
               </div>
-              <div v-else class="editable-cell-text-wrapper" @dblclick="dblclick(index, record)">
-                {{ record[column.dataIndex] || ' ' }}
+              <div v-else class="editable-cell-text-wrapper" >
+                {{ record[column.dataIndex] || ' ' }} <span style="float:right"><EditOutlined @click="dblclick(index, record)"/></span>
               </div>
             </div>
           </template>
@@ -223,5 +223,8 @@ defineExpose({
 }
 .editable-cell-text-wrapper {
   cursor: pointer;
+  width: 100%;
+    height: 100%;
+    // background: red;
 }
 </style>

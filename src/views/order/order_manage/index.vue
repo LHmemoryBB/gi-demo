@@ -164,84 +164,84 @@ const headers = [
   {
     title: '单号',
     dataIndex: 'orderSn',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '客户',
     dataIndex: 'userName',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '产品名称',
     dataIndex: 'productName',
-	align: 'center'
+    align: 'center'
   },
   {
     type: 'slot',
     title: '账号',
     width: '120px',
     dataIndex: 'phone',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '归属',
     dataIndex: 'areaName',
-	align: 'center'
+    align: 'center'
   },
   {
     type: 'slot',
     title: '状态',
     default: 'orderStatusStr',
-	align: 'center'
+    align: 'center'
   },
   {
     type: 'slot',
     title: '时间',
     width: '200px',
     dataIndex: 'pushDate',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '金额',
     dataIndex: 'amount',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '接口',
     dataIndex: 'interfaceName',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '备注',
     dataIndex: 'remark',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '回调地址',
     dataIndex: 'rebackUrl',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '耗时',
     dataIndex: 'time',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '卡密/流水',
     dataIndex: 'rebackInfo',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '回调次数',
     dataIndex: 'rebackNum',
-	align: 'center'
+    align: 'center'
   },
   {
     type: 'slot',
     title: '操作',
     width: '100px',
     dataIndex: 'operation',
-	align: 'center'
+    align: 'center'
   }
 ]
 const { loading, data, send, pages, onSuccess } = useAxios(setOrderInfoList, {
@@ -302,11 +302,11 @@ const open = () => {
 
 const TtableRef = ref(null)
 const onBatch = (type) => {
-  const SelectionRows = TtableRef.value.getSelectionRows()
+  const SelectionRows = TtableRef.value.getSelectionRowsFnc()
   if (!SelectionRows.length) {
     notification.warning({
       message: '提示',
-      description: '至少选则一项！',
+      description: '至少选则一项！'
     })
     return
   }
@@ -321,11 +321,11 @@ const onBatch = (type) => {
 }
 
 const onBatchCallBack = () => {
-  const SelectionRows = TtableRef.value.getSelectionRows()
+  const SelectionRows = TtableRef.value.getSelectionRowsFnc()
   if (!SelectionRows.length) {
     notification.warning({
       message: '提示',
-      description: '至少选则一项！',
+      description: '至少选则一项！'
     })
     return
   }
@@ -359,12 +359,12 @@ const onCopy = async (e) => {
     await toClipboard(e)
     notification.success({
       message: '提示',
-      description: '已复制',
+      description: '已复制'
     })
   } catch (error) {
     notification.error({
       message: '提示',
-      description: '复制失败',
+      description: '复制失败'
     })
   }
 }

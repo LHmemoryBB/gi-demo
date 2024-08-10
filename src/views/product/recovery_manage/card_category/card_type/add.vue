@@ -167,13 +167,13 @@ defineExpose({
       </template>
       <template #validMinDay="scope">
         <a-form-item
-          v-if="ruleForm.valid == true"
+          v-if="ruleForm.valid"
           label="最小有效期"
           name="validMinDay"
           :rules="{ required: true, message: '请填写最小有效期' }"
           label-width="120px"
         >
-          <a-input style="width: 200px" placeholder="请填写最小有效期" v-model="ruleForm.validMinDay"></a-input>
+          <a-input style="width: 200px" placeholder="请填写最小有效期" v-model:value="ruleForm.validMinDay"></a-input>
         </a-form-item>
       </template>
       <template #background="scope">

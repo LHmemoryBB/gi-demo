@@ -45,13 +45,17 @@ const props = defineProps({
   layout: {
     type: String,
     default: 'horizontal'
+  },
+  roleStr: {
+    type: String,
+    default: undefined
   }
 })
 const labelCol = computed(() =>{
   return {style: { width: props.label_width }}
 })
 //form提交
-const emit = defineEmits(['submit', 'resetForm'])
+const emit = defineEmits(['submit', 'resetForm', 'selectChange'])
 const formRef = ref()
 //keys 不同的查询条件
 const submitForm = async (keys) => {
@@ -61,8 +65,6 @@ const submitForm = async (keys) => {
 }
 //清空
 const resetForm = () => {
-  console.log(formRef.value)
-
   if (!formRef.value) return
   formRef.value?.resetFields()
   //   props.listInput.map((item) => {
@@ -92,11 +94,10 @@ const disabledDate = (current: Dayjs) => {
   return current && current < dayjs().endOf('day');
 };
 
-const selectChange = (v, item) => {
+const selectChangeFnc = (v, item) => {
   emit('selectChange', v, item)
 }
 const radioChange = (v, item) => {
-  console.log(v, item)
 
   // emit('selectChange',v,item)
 }
@@ -159,7 +160,7 @@ defineExpose({
             v-else-if="item.type == 'select'"
             :ruleForm="ruleForm"
             :listInput="item"
-            @selectChange="selectChange"
+            @selectChange="selectChangeFnc"
           />
           <Tradio v-else-if="item.type == 'radio'" :ruleForm="ruleForm" :listInput="item" @selectChange="radioChange" />
 
@@ -176,7 +177,8 @@ defineExpose({
     <a-form-item v-if="!btn_hide">
       <!-- <a-space> -->
       <div class="btn_class">
-        <a-button :loading="loading" type="primary" @click="submitForm()" ghost>{{ querytext }}</a-button>
+        <a-button :loading="loading" type="primary" @click="submitForm()" ghost v-if="roleStr" v-hasPerm="[roleStr]">{{ querytext }}</a-button>
+        <a-button :loading="loading" type="primary" @click="submitForm()" ghost v-else>{{ querytext }}</a-button>
         <a-button danger @click="resetForm()" v-if="!hidden_refresh" class="_btn">清空</a-button>
         <slot name="operation"></slot>
       </div>

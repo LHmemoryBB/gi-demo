@@ -59,6 +59,7 @@ const activeMenu = computed(() => {
   z-index: 1000;
   display: flex;
   flex-direction: column;
+  overflow: auto;
   border-right: 1px solid var(--color-border-2);
   .menu {
     flex: 1 !important;

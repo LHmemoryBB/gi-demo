@@ -110,7 +110,7 @@ defineExpose({
 
 <template>
   <Tdialog :Update="Update" :loading="loading" footer_hide>
-    <div class="content content_form">
+    <div class="form-container">
       <Tform
         :loading="loading"
         :ruleForm="ruleForm"
@@ -120,10 +120,10 @@ defineExpose({
         layout="inline"
       ></Tform>
     </div>
-    <div class="content">
+    <div class="table-container">
       <Ttable :loading="loading" :headers="headers" :tableData="data" :pages="pages" :tableHeight="600">
         <template #operation="{ record }">
-          <a-button type="primary" text @click="onChoice(record)" size="small">选择</a-button>
+          <a-button type="primary" ghost @click="onChoice(record)" size="small">选择</a-button>
         </template>
       </Ttable>
     </div>
@@ -134,5 +134,8 @@ defineExpose({
 .img {
   width: 50px;
   height: 50px;
+}
+.form-container :deep(.ant-form-item){
+  margin: 5px;
 }
 </style>

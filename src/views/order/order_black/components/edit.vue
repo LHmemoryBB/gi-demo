@@ -25,9 +25,9 @@ const _state = () => ({
 const validatorPhone = (rule, value, callback) => {
   const reg = /^1[3456789]\d{9}$/
   if (!reg.test(value)) {
-    callback(new Error('请输入正确的手机号'))
+    return Promise.reject('请输入正确的手机号')
   } else {
-    callback()
+    return Promise.resolve();
   }
 }
 

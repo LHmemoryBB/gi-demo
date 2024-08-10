@@ -107,12 +107,12 @@ const onComDel = (row) => {
       ></Tform>
     </div>
     <div class="table-container">
-      <a-button type="primary" @click="onComAdd()">新增</a-button>
+      <a-button type="primary" ghost @click="onComAdd()">新增</a-button>
       <Ttable :loading="loading" :headers="headers" :tableData="data" :pages="pages">
         <template #operation="{ record }">
           <div class="_btn"></div>
-          <a-button type="primary" text @click="onComEdit(record)" size="small">编辑</a-button>
-          <a-button type="primary" text @click="onComDel(record)" size="small" class="m_l_10">删除</a-button>
+          <a-button type="primary" ghost @click="onComEdit(record)" size="small">编辑</a-button>
+          <a-button danger ghost @click="onComDel(record)" size="small" class="m_l_10">删除</a-button>
         </template>
       </Ttable>
     </div>

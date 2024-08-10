@@ -77,75 +77,75 @@ const headers = [
     title: 'ID',
     dataIndex: 'id',
     width: '50px',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '分类',
     dataIndex: 'categoryName',
     width: '80px',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '名称',
     dataIndex: 'productName',
     width: '120px',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '运营商',
     dataIndex: 'operatorStr',
     width: '80px',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '允许地区',
     dataIndex: 'whiteArea',
     width: '100px',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '限制地区',
     dataIndex: 'blackArea',
     width: '100px',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '面值',
     dataIndex: 'par',
     width: '80px',
-	align: 'center'
+    align: 'center'
   },
   {
     title: '价格',
     dataIndex: 'price',
     width: '80px',
-	align: 'center'
+    align: 'center'
   },
   {
     type: 'slot',
     title: '接口套餐',
     width: '180px',
-	align: 'center',
-	dataIndex: 'interfaceName'
+    align: 'center',
+    dataIndex: 'interfaceName'
   },
   {
     type: 'slot',
     title: '上架',
     width: '80px',
-	align: 'center',
-	dataIndex: 'marketd'
+    align: 'center',
+    dataIndex: 'marketd'
   },
   {
     type: 'slot',
     title: '启停',
     width: '80px',
-	align: 'center',
-	dataIndex: 'enabled'
+    align: 'center',
+    dataIndex: 'enabled'
   },
   {
     type: 'slot',
     title: '操作',
-	align: 'center',
+    align: 'center',
     dataIndex: 'operation'
   }
 ]
@@ -225,9 +225,8 @@ const switch_marketd_beforeChange = (row) => {
             v-model:checked="record.enabled"
             checked-children="是"
             un-checked-children="否"
-            inline-prompt
             :loading="record.enabled_loading"
-            @change="switch_enabled_beforeChange(this, record)"
+            @change="switch_enabled_beforeChange(record)"
           />
         </template>
         <template #marketd="{ record }">
@@ -235,14 +234,13 @@ const switch_marketd_beforeChange = (row) => {
             v-model:checked="record.marketd"
             checked-children="是"
             un-checked-children="否"
-            inline-prompt
             :loading="record.marketd_loading"
-            @change="switch_marketd_beforeChange(this, record)"
+            @change="switch_marketd_beforeChange(record)"
           />
         </template>
         <template #operation="{ record }">
-          <a-button type="primary" text @click="onComEdit(record)"  size="small">编辑</a-button>
-          <a-button type="primary" text @click="onComDel(record)" size="small" class="m_l_10">删除</a-button>
+          <a-button type="primary" ghost @click="onComEdit(record)" size="small">编辑</a-button>
+          <a-button danger ghost @click="onComDel(record)" size="small" class="m_l_10">删除</a-button>
         </template>
       </Ttable>
     </div>

@@ -110,7 +110,7 @@ defineExpose({
     >
       <template #color="scope">
         <a-form-item label="背景色" name="color" label-width="120px">
-          <!-- <a-color-picker v-model="ruleForm.color" /> -->
+          <input type="color" v-model="ruleForm.color" />
         </a-form-item>
       </template>
     </Tform>

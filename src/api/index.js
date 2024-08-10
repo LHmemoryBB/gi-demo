@@ -6,7 +6,7 @@ export const ipt_select = data => http.get('/api'+data.url,data.params);
 export const up_images = () => { return'/api/upload/files'};
 //上传单张图
 export const up_image = () => { return'/api/upload/file'};
-
+export const upload_img_single = data => http.post('/api/upload/singleImg', data)
 export const up_singleImg = () => { return'/api/upload/singleImg'};
 export const up_singlePdf = () => { return'/api/upload/singlePdf'};
 
@@ -274,3 +274,38 @@ export const chargeBuyback = data => http.post('/api/orderChargeInfo/buyback', d
 export const chargeBuybackHis = data => http.post('/api/orderChargeInfo/buybackHis', data);
 /*话单订单信息--验单详情页*/
 export const checkOrderDetail = data => http.get('/api/orderChargeInfo/checkOrderDetail', data);
+
+
+/*--  系统权限管理  --*/
+/*获取菜单管理列表*/
+export const roleMenuList = data => http.post('/api/menu/query', data);
+/*获取菜单按钮树*/
+export const roleMenuTree = data => http.post('/api/menuTree', data);
+/*新增菜单*/
+export const roleMenuInsert = data => http.post('/api/menu/insert', data);
+/*修改菜单*/
+export const roleMenuEdit = data => http.post('/api/menu/edit', data);
+/*删除菜单*/
+export const roleMenuDel = data => http.post('/api/menu/del', data);
+/*菜单下新增按钮*/
+export const roleMenuInsertButton = data => http.post('/api/menu/insertButton', data);
+/*菜单下修改按钮*/
+export const roleMenuEditButton = data => http.post('/api/menu/editButton', data);
+/*菜单下删除按钮*/
+export const roleMenuDelButton = data => http.post('/api/menu/delButton', data);
+
+
+/*角色管理列表*/
+export const roleList = data => http.post('/api/role/query', data);
+/*新增角色*/
+export const roleInsert = data => http.post('/api/role/insert', data);
+/*角色授权回显*/
+export const roleEmpowerList = data => http.get('/api/role/empower_list', data);
+/*删除角色*/
+export const roleDelete = data => http.post('/api/role/del', data);
+/*角色菜单授权*/
+export const roleEmpowerMenu = data => http.post('/api/role/empower_menu', data);
+/*角色菜单按钮授权*/
+export const roleEmpowerMenuBtn = data => http.post('/api/role/empower_menu_button', data);
+/*授权登录按钮*/
+export const rolecanLogin = data => http.post('/api/role/canLogin', data);

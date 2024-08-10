@@ -21,7 +21,6 @@ const setThemeColor = reactive({
     }
 })
 setThemeColor.token.colorPrimary = computed(() => appStore.getThemeColor())
-console.log();
 
 </script>
 

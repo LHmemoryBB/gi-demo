@@ -95,7 +95,6 @@ onSuccess((res) => {
   notification.success({
     title: '提示',
     message: '新增成功!',
-    duration: 3
   })
   emit('onSuccess')
   Update.isShow = false
@@ -104,7 +103,6 @@ onError((res) => {
   notification.error({
     title: '提示',
     message: res.data.message ?? '新增失败！',
-    duration: 3
   })
 })
 
@@ -153,7 +151,7 @@ defineExpose({
       btn_hide
     >
       <template #all="scope">
-        <a-form-item label="营业执照" :prop="'businessLicense'" :rules="{ required: true, message: '请添加图片' }">
+        <a-form-item label="营业执照" :name="'businessLicense'" :rules="{ required: true, message: '请添加图片' }">
           <TuploadImg
             :up_img_api="up_images"
             :fileList="ruleForm.businessLicense"
@@ -167,7 +165,7 @@ defineExpose({
         </a-form-item>
         <a-form-item
           label="基本户开户许可证"
-          :prop="'openAccountPermit'"
+          :name="'openAccountPermit'"
           :rules="{ required: true, message: '请添加图片' }"
         >
           <TuploadImg
@@ -183,7 +181,7 @@ defineExpose({
         </a-form-item>
         <a-form-item
           label="电信增值业务许可证"
-          :prop="'valueAddPermit'"
+          :name="'valueAddPermit'"
           :rules="{ required: true, message: '请添加图片' }"
         >
           <TuploadImg
@@ -197,7 +195,7 @@ defineExpose({
             @pathRemove="(file, fileList) => pathRemove(file, fileList, 'valueAddPermit')"
           ></TuploadImg>
         </a-form-item>
-        <a-form-item label="法人身份证正反面" :prop="'idcardProve'" :rules="{ required: true, message: '请添加图片' }">
+        <a-form-item label="法人身份证正反面" :name="'idcardProve'" :rules="{ required: true, message: '请添加图片' }">
           <TuploadImg
             :up_img_api="up_images"
             :fileList="ruleForm.idcardProve"
@@ -209,7 +207,7 @@ defineExpose({
             @pathRemove="(file, fileList) => pathRemove(file, fileList, 'idcardProve')"
           ></TuploadImg>
         </a-form-item>
-        <a-form-item label="其他资质" :prop="'other'">
+        <a-form-item label="其他资质" :name="'other'">
           <TuploadImg
             :up_img_api="up_images"
             :fileList="ruleForm.other"

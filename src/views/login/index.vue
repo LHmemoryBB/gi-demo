@@ -47,7 +47,7 @@
     <Verify
         @success="success"
         mode="pop"
-        captchaType="blockPuzzle"
+        captchaType="clickWord"
         :imgSize="{ width: '330px', height: '155px' }"
         ref="verify"
       >
@@ -96,9 +96,7 @@ async function success(msg) {
     form.captchaVerification = msg.captchaVerification
     form.password = md5(form.password)
     setLoading(true)
-    await userStore.login(form)
-    console.log('123123123, 登录成功回调');
-    
+    await userStore.login(form)    
     router.push('/')
     setLoading(false)
     Message.success('登录成功')
